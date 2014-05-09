@@ -49,9 +49,11 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
                 //Navigation::addItem('/UniZensusAdmin/show', clone $navigation);
                 $token_navigation = new Navigation(_("Export Token"), PluginEngine::getLink($this, array(), 'token'));
+                $template_navigation = new Navigation(_("Textvorlagen bearbeiten"), PluginEngine::getLink($this, array(), 'templates'));
                 $subnav = clone $navigation;
                 $subnav->addSubNavigation('show', clone $navigation);
                 $subnav->addSubNavigation('token', $token_navigation);
+                $subnav->addSubNavigation('templates', $template_navigation);
                 $navigation->addSubNavigation('sub', $subnav);
                 Navigation::addItem('/UniZensusAdmin', $navigation);
             } else {
@@ -133,7 +135,6 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $form_fields['text_template']  = array('type' => 'select');
         $form_fields['text_template']['options'] = UnizensusTextTemplate::getAll();
         $form_buttons['create_news'] = array('name' => 'uebernehmen', 'caption' => _("Ankündigung erstellen"));
-        $form_buttons['edit_templates'] = array('name' => 'uebernehmen', 'caption' => _("Nachrichtenvorlagen bearbeiten"));
         $form_buttons['send_message'] = array('name' => 'uebernehmen', 'caption' => _("Nachricht senden"));
         $form_buttons['set_plugin_status'] = array('name' => 'uebernehmen', 'caption' => _("Plugin ein/ausschalten"));
         $form_buttons['set_starttime'] = array('name' => 'uebernehmen', 'caption' => _("Startzeit übernehmen"));
@@ -309,7 +310,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo chr(10).'<div style="margin:10px;font-size:10pt;font-weight:bold">';
                 echo _("Nachrichten/Ankündigungen für gewählte Veranstaltungen erstellen:") .'</div>';
                 echo chr(10).'<div style="margin:10px;font-size:10pt;">';
-                echo chr(10) . '<label for="text_template">'._('Vorlage auswählen:').'</label>';
+                echo chr(10) . '<label for="text_template">'._('Textvorlage auswählen:').'</label>';
                 echo chr(10) . $form->getFormField('text_template');
                 echo '&nbsp;&nbsp;&nbsp;'. $form->getFormButton('send_message', array('style' => 'vertical-align:middle'));
                 echo '&nbsp;'. $form->getFormButton('create_news', array('style' => 'vertical-align:middle'));
@@ -424,6 +425,36 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $layout->content_for_layout = ob_get_clean();
 
         echo $layout->render();
+    }
+
+    function templates_action() {
+        Navigation::activateItem('/UniZensusAdmin/sub/templates');
+        echo '<table class="default">';
+        echo '<caption>'._('Textvorlagen für Nachrichten und Ankündigungen').'</caption>';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th>'._('Name').'</th>';
+        echo '<th>'._('Template').'</th>';
+        echo '<th>'._('Aktionen').'</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+        foreach (UnizensusTextTemplate::getAll() as $t) {
+            echo '<tr>';
+            echo '<td>'.htmlReady($t['name']).'</td>'
+            echo '<td>'.htmlReady($t['template']).'</td>'
+            echo '<td>';
+            echo '<a href="'.PluginEngine::getLink($this, array($t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten').'">';
+            echo Assets::img('icons/16/blue/edit.png');
+            echo '</a>';
+            echo '<a href="'.PluginEngine::getLink($this, array($t['template_id']), 'delete_template').'" title="'._('Vorlage löschen').'">';
+            echo Assets::img('icons/16/blue/trash.png');
+            echo '</a>';
+            echo '</td>';
+            echo '<tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
     }
 
     function getInstitute($seminare_condition){
