@@ -8,7 +8,7 @@ class TextTemplates extends DBMigration
             `template` TEXT NOT NULL,
             `mkdate` INT NOT NULL,
             `chdate` INT NOT NULL,
-            PRIMARY KEY `template_id`
+            PRIMARY KEY (`template_id`)
         )");
         $tpl = new UnizensusTextTemplate();
         $tpl->setName('Einladung zur Evaluation');
