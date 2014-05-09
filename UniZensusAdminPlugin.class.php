@@ -49,7 +49,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
                 //Navigation::addItem('/UniZensusAdmin/show', clone $navigation);
                 $token_navigation = new Navigation(_("Export Token"), PluginEngine::getLink($this, array(), 'token'));
-                $template_navigation = new Navigation(_("Textvorlagen bearbeiten"), PluginEngine::getLink($this, array(), 'templates'));
+                $template_navigation = new Navigation(_("Textvorlagen"), PluginEngine::getLink($this, array(), 'templates'));
                 $subnav = clone $navigation;
                 $subnav->addSubNavigation('show', clone $navigation);
                 $subnav->addSubNavigation('token', $token_navigation);
