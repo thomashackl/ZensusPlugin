@@ -488,7 +488,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 'kategorie' => _('Aktionen'),
                 'eintrag'   => array(
                     array(
-                        'icon' => 'icons/16/black/add.png',
+                        'icon' => 'icons/16/blue/add.png',
                         'text' => '<a href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
                                   _('Neue Textvorlage anlegen').'</a>'
                     )
