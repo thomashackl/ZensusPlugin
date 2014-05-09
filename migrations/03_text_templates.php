@@ -11,8 +11,8 @@ class TextTemplates extends DBMigration
             PRIMARY KEY (`template_id`)
         )");
         $tpl = new UnizensusTextTemplate();
-        $tpl->setName('Einladung zur Evaluation');
-        $tpl->setTemplate('###SUBJECT###
+        $tpl->name = 'Einladung zur Evaluation';
+        $tpl->template = '###SUBJECT###
 Evaluation ###COURSENUMBER### ###COURSENAME###
 ###SUBJECT###
 ###MESSAGE###
@@ -26,7 +26,7 @@ Wir hoffen auf rege Beteilung!
  
 Das Evaluationsteam
 Ulrich Zukowski
-###MESSAGE###');
+###MESSAGE###';
         $tpl->store();
     }
 
