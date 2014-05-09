@@ -445,10 +445,10 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             echo '<td>'.htmlReady($t['name']).'</td>';
             echo '<td>'.htmlReady($t['template']).'</td>';
             echo '<td>';
-            echo '<a href="'.PluginEngine::getLink($this, array($t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten').'">';
+            echo '<a href="'.PluginEngine::getLink($this, array('tpl' => $t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten').'">';
             echo Assets::img('icons/16/blue/edit.png');
             echo '</a>';
-            echo '<a href="'.PluginEngine::getLink($this, array($t['template_id']), 'delete_template').'" title="'._('Vorlage löschen').'">';
+            echo '<a href="'.PluginEngine::getLink($this, array('tpl' => $t['template_id']), 'delete_template').'" title="'._('Vorlage löschen').'">';
             echo Assets::img('icons/16/blue/trash.png');
             echo '</a>';
             echo '</td>';
