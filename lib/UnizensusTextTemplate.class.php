@@ -31,14 +31,14 @@ class UnizensusTextTemplate extends SimpleORMap
 
     public function getMarkers() {
         return array(
-            'EVALUATION_START' => array(
+            /*'EVALUATION_START' => array(
                 'description' => _('Beginn des Evaluationszeitraums'),
                 'replace' => 'date("d.m.Y", $timeframe[0])'
             ),
             'EVALUATION_END' => array(
                 'description' => _('Ende des Evaluationszeitraums'),
                 'replace' => 'date("d.m.Y", $timeframe[1])'
-            ),
+            ),*/
             'COURSENUMBER' => array(
                 'description' => _('Veranstaltungsnummer'),
                 'replace' => '$course->number'
@@ -61,12 +61,30 @@ class UnizensusTextTemplate extends SimpleORMap
 
     public function createText($courseId, $tplId) {
         $course = Course::find($courseId);
-        $tpl = self::find($tplId);
+        $tpl = new UnizensusTextTemplate($tplId);
+        $markers = array(
+            'COURSENUMBER' => array(
+                'description' => _('Veranstaltungsnummer'),
+                'replace' => $course->veranstaltungsnummer
+            ),
+            'COURSETYPE' => array(
+                'description' => _('Veranstaltungstyp'),
+                'replace' => $GLOBALS['SEM_TYPE'][$course->status]['name']
+            ),
+            'COURSENAME' => array(
+                'description' => _('Titel der Veranstaltung'),
+                'replace' => $course->name
+            ),
+            'COURSELINK' => array(
+                'description' => _('Stud.IP-Link zur Veranstaltung'),
+                'replace' => $GLOBALS['ABSOLUTE_URI_STUDIP'].'seminar_main.php?auswahl='.$course->id
+            )
+        );
         $subject = $tpl->subject;
         $text = $tpl->message;
-        foreach (self::getMarkers() as $marker => $data) {
-            $subject = str_replace('###'.$marker.'###', $$data['replace'], $subject);
-            $text = str_replace('###'.$marker.'###', $$data['replace'], $text);
+        foreach ($markers as $marker => $data) {
+            $subject = str_replace('###'.$marker.'###', $data['replace'], $subject);
+            $text = str_replace('###'.$marker.'###', $data['replace'], $text);
         }
         return array('subject' => $subject, 'text' => $text);
     }

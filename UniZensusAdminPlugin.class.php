@@ -181,19 +181,20 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         }
 
         if ($form->isClicked('send_message')) {
-            if ($_REQUEST['text_template']) {
-                if (is_array($_REQUEST['sem_choosen'])) {
+            if (Request::option('studipform_text_template')) {
+                if (Request::getArray('sem_choosen')) {
                     $m = new Message();
-                    $t = $_REQUEST['text_template'];
-                    foreach ($_REQUEST['sem_choosen'] as $s) {
+                    $t = Request::option('studipform_text_template');
+                    foreach (array_keys(Request::getArray('sem_choosen')) as $s) {
                         $text = UnizensusTextTemplate::createText($s, $t);
-                        $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
+                        echo 'Generated text:<pre>'.print_r($text, 1).'</pre>';
+                        /*$members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
                         if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/lib/GarudaModel.php')) {
                             require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/lib/GarudaModel.php');
                             GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['message']);
                         } else {
                             $m->send($GLOBALS['user']->id, $members, $text['subject'], $text['message']);
-                        }
+                        }*/
                     }
                 } else {
                     echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
