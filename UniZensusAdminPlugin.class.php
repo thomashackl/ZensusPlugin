@@ -129,6 +129,11 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $form_fields['endtime'] = array('type' => 'text');
         $form_fields['endtime']['attributes'] = array('size'=>10, 'onMouseOver' => 'jQuery(this).datepicker();');
         $form_fields['plugin_status']  = array('type' => 'radio',  'separator' => '&nbsp;', 'default_value' => 1, 'options' => array(array('name'=>_("Ein"),'value'=>'1'),array('name'=>_("Aus"),'value'=>'0')));
+        $form_fields['text_template']  = array('type' => 'select');
+        $form_fields['text_template']['options'] = UnizensusTextTemplate::getAll();
+        $form_buttons['create_news'] = array('name' => 'uebernehmen', 'caption' => _("Ankündigung erstellen"));
+        $form_buttons['edit_templates'] = array('name' => 'uebernehmen', 'caption' => _("Nachrichtenvorlagen bearbeiten"));
+        $form_buttons['send_message'] = array('name' => 'uebernehmen', 'caption' => _("Nachricht senden"));
         $form_buttons['set_plugin_status'] = array('name' => 'uebernehmen', 'caption' => _("Plugin ein/ausschalten"));
         $form_buttons['set_starttime'] = array('name' => 'uebernehmen', 'caption' => _("Startzeit übernehmen"));
         $form_buttons['set_endtime'] = array('name' => 'uebernehmen', 'caption' => _("Endzeit übernehmen"));
@@ -299,6 +304,14 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo chr(10).'<div style="margin:10px;font-size:10pt;">';
                 echo chr(10) . $form->getFormField('plugin_status');
                 echo '&nbsp;&nbsp;&nbsp;'. $form->getFormButton('set_plugin_status', array('style' => 'vertical-align:middle'));
+                echo chr(10). '</div>';
+                echo chr(10).'<div style="margin:10px;font-size:10pt;font-weight:bold">';
+                echo _("Nachrichten/Ankündigungen für gewählte Veranstaltungen erstellen:") .'</div>';
+                echo chr(10).'<div style="margin:10px;font-size:10pt;">';
+                echo chr(10) . '<label for="text_template">'._('Vorlage auswählen:').'</label>';
+                echo chr(10) . $form->getFormField('text_template');
+                echo '&nbsp;&nbsp;&nbsp;'. $form->getFormButton('send_message', array('style' => 'vertical-align:middle'));
+                echo '&nbsp;'. $form->getFormButton('create_news', array('style' => 'vertical-align:middle'));
                 echo chr(10). '</div>';
                 echo chr(10). '<a name="zensustable"></a>';
                 echo "<table class=\"default\">";
