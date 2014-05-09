@@ -4,7 +4,7 @@ class TextTemplates extends DBMigration
     function up(){
         DBManager::get()->exec("CREATE TABLE IF NOT EXISTS `unizensus_text_templates` (
             `template_id` VARCHAR(32) NOT NULL,
-            `name` VARCHAR(255)  NOT NULL,
+            `name` VARCHAR(255)  NOT NULL UNIQUE,
             `subject` VARCHAR(255) NOT NULL,
             `message` TEXT NOT NULL,
             `mkdate` INT NOT NULL,
