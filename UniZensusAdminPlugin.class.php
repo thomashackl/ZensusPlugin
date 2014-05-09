@@ -133,7 +133,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $form_fields['endtime']['attributes'] = array('size'=>10, 'onMouseOver' => 'jQuery(this).datepicker();');
         $form_fields['plugin_status']  = array('type' => 'radio',  'separator' => '&nbsp;', 'default_value' => 1, 'options' => array(array('name'=>_("Ein"),'value'=>'1'),array('name'=>_("Aus"),'value'=>'0')));
         $form_fields['text_template']  = array('type' => 'select');
-        $form_fields['text_template']['options'] = array_map(function($t) { return array('name' => $t['name'], 'value' => $t['template_id']); }, UnizensusTextTemplate::getAll();
+        $form_fields['text_template']['options'] = array_map(function($t) { return array('name' => $t['name'], 'value' => $t['template_id']); }, UnizensusTextTemplate::getAll());
         $form_buttons['create_news'] = array('name' => 'uebernehmen', 'caption' => _("Ankündigung erstellen"));
         $form_buttons['send_message'] = array('name' => 'uebernehmen', 'caption' => _("Nachricht senden"));
         $form_buttons['set_plugin_status'] = array('name' => 'uebernehmen', 'caption' => _("Plugin ein/ausschalten"));
