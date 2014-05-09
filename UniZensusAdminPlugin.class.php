@@ -31,7 +31,7 @@
 require_once "lib/classes/StudipForm.class.php";
 require_once "UniZensusPlugin.class.php";
 require_once 'zensus_xml_func.php';   // XML-Funktionen
-require_once realpath(dirname(__FILE__).'./lib/UnizensusTextTemplate.class.php');
+require_once 'lib/UnizensusTextTemplate.class.php';
 
 class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
