@@ -135,7 +135,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $form_fields['text_template']  = array('type' => 'select');
         $options = array();
         foreach (UnizensusTextTemplate::getAll() as $t) {
-            $options[] = array('name' => $t['name'], 'value' => $t['value']);
+            $options[] = array('name' => $t['name'], 'value' => $t['template_id']);
         }
         $form_fields['text_template']['options'] = $options;
         $form_buttons['create_news'] = array('name' => 'uebernehmen', 'caption' => _("Ankündigung erstellen"));
