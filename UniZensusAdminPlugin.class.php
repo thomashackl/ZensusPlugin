@@ -483,6 +483,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                                   'oder Erstellen einer Textvorlage.')
                     )
                 ),
+            ),
+            array(
                 'kategorie' => _('Aktionen'),
                 'eintrag'   => array(
                     array(
