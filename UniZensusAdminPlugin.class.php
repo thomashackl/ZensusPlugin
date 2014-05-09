@@ -429,6 +429,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
     function templates_action() {
         Navigation::activateItem('/UniZensusAdmin/sub/templates');
+        ob_start();
         echo '<table class="default">';
         echo '<caption>'._('Textvorlagen für Nachrichten und Ankündigungen').'</caption>';
         echo '<thead>';
@@ -455,6 +456,13 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         }
         echo '</tbody>';
         echo '</table>';
+        PageLayout::setTitle($this->getDisplayname());
+
+        $layout = $GLOBALS['template_factory']->open('layouts/base');
+
+        $layout->content_for_layout = ob_get_clean();
+
+        echo $layout->render();
     }
 
     function getInstitute($seminare_condition){
