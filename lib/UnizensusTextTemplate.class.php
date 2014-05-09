@@ -26,9 +26,6 @@ class UnizensusTextTemplate extends SimpleORMap
     public function getAll() {
         $templates = array();
         $data = DBManager::get()->fetchAll("SELECT * FROM `unizensus_text_templates` ORDER BY `name`");
-        foreach ($data as $t) {
-            $templates[] = array('name' => $t['name'], 'value' => $t['template_id']);
-        }
         return $templates;
     }
 }
