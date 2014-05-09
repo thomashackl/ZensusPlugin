@@ -180,6 +180,29 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             }
         }
 
+        if ($form->isClicked('send_message')) {
+            if ($_REQUEST['text_template']) {
+                if (is_array($_REQUEST['sem_choosen'])) {
+                    $m = new Message();
+                    $t = $_REQUEST['text_template'];
+                    foreach ($_REQUEST['sem_choosen'] as $s) {
+                        $text = UnizensusTextTemplate::createText($s, $t);
+                        $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
+                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/lib/GarudaModel.php')) {
+                            require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/lib/GarudaModel.php');
+                            GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['message']);
+                        } else {
+                            $m->send($GLOBALS['user']->id, $members, $text['subject'], $text['message']);
+                        }
+                    }
+                } else {
+                    echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
+                }
+            } else {
+                echo MessageBox::error(_('Bitte wählen Sie eine Textvorlage aus. Evtl. müssen Sie erst eine neue Vorlage anlegen.'));
+            }
+        }
+
         if (Request::submitted('choose_institut')) {
             $_SESSION['_default_sem'] = Request::option('select_sem', $_SESSION['_default_sem']);
             $_SESSION['zensus_admin']['check_eval'] = isset($_REQUEST['check_eval']);

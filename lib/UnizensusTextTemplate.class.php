@@ -28,4 +28,46 @@ class UnizensusTextTemplate extends SimpleORMap
         $templates = DBManager::get()->fetchAll("SELECT * FROM `unizensus_text_templates` ORDER BY `name`");
         return $templates;
     }
+
+    public function getMarkers() {
+        return array(
+            'EVALUATION_START' => array(
+                'description' => _('Beginn des Evaluationszeitraums'),
+                'replace' => "date('d.m.Y', $timeframe[0])"
+            ),
+            'EVALUATION_END' => array(
+                'description' => _('Ende des Evaluationszeitraums'),
+                'replace' => "date('d.m.Y', $timeframe[1])"
+            ),
+            'COURSENUMBER' => array(
+                'description' => _('Veranstaltungsnummer'),
+                'replace' => "$course->number"
+            ),
+            'COURSETYPE' => array(
+                'description' => _('Veranstaltungstyp'),
+                'replace' => "$GLOBALS['SEM_TYPE'][$course->status]['name']"
+            ),
+            'COURSENAME' => array(
+                'description' => _('Titel der Veranstaltung'),
+                'replace' => "$course->name"
+            ),
+            'COURSELINK' => array(
+                'description' => _('Stud.IP-Link zur Veranstaltung'),
+                'replace' => "URLHelper::getLink('seminar_main.php', array('auswahl' => $course->id)"
+            )
+        );
+
+    }
+
+    public function createText($courseId, $tplId) {
+        $course = Course::find($courseId);
+        $tpl = self::find($tplId);
+        $subject = $tpl->subject;
+        $text = $tpl->message;
+        foreach (self::getMarkers() as $marker => $data) {
+            $subject = str_replace('###'.$marker.'###', $$data['replace'], $subject);
+            $text = str_replace('###'.$marker.'###', $$data['replace'], $text);
+        }
+        return array('subject' => $subject, 'text' => $text);
+    }
 }
