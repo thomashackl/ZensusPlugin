@@ -26,7 +26,7 @@ Wir hoffen auf rege Beteiligung!
 Das Evaluationsteam
 Ulrich Zukowski';
         $tpl->store();
-$tpl = new UnizensusTextTemplate();
+        $tpl = new UnizensusTextTemplate();
         $tpl->name = 'Erinnerung zur Evaluation';
         $tpl->subject = 'Erinnerung: Evaluation ###COURSENUMBER### ###COURSENAME###';
         $tpl->message = 'Liebe Teilnehmerinnen und Teilnehmer der Veranstaltung ###COURSENAME###,
