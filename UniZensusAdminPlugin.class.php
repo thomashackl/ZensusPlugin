@@ -430,13 +430,13 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
     function templates_action() {
         Navigation::activateItem('/UniZensusAdmin/sub/templates');
         ob_start();
-        echo '<table class="default">';
+        echo '<table class="default" width="100%">';
         echo '<caption>'._('Textvorlagen für Nachrichten und Ankündigungen').'</caption>';
         echo '<thead>';
         echo '<tr>';
-        echo '<th>'._('Name').'</th>';
+        echo '<th width="20%">'._('Name').'</th>';
         echo '<th>'._('Template').'</th>';
-        echo '<th>'._('Aktionen').'</th>';
+        echo '<th width=40">'._('Aktionen').'</th>';
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
