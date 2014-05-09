@@ -493,6 +493,10 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 )
             )
         );
+        $infobox = $GLOBALS['template_factory']->open('infobox/infobox_generic_content.php');
+        $infobox->picture = 'infobox/schedule.jpg';
+        $infobox->content = $infobox_content;
+        $layout->set_attribute('infobox', $infobox->render());
         echo $layout->render();
     }
 
