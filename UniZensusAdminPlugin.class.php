@@ -441,8 +441,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         echo '<tbody>';
         foreach (UnizensusTextTemplate::getAll() as $t) {
             echo '<tr>';
-            echo '<td>'.htmlReady($t['name']).'</td>'
-            echo '<td>'.htmlReady($t['template']).'</td>'
+            echo '<td>'.htmlReady($t['name']).'</td>';
+            echo '<td>'.htmlReady($t['template']).'</td>';
             echo '<td>';
             echo '<a href="'.PluginEngine::getLink($this, array($t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten').'">';
             echo Assets::img('icons/16/blue/edit.png');
