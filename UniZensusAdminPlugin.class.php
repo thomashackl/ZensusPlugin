@@ -462,6 +462,37 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         $layout->content_for_layout = ob_get_clean();
 
+        $infobox_content = array(
+            array(
+                'kategorie' => _('Informationen'),
+                'eintrag'   => array(
+                    array(
+                        'icon' => 'icons/16/black/admin.png',
+                        'text' => _('Bearbeiten Sie hier Ihre Textvorlagen, '.
+                                  'die anschließend in ausgewählten '.
+                                  'Veranstaltungen als Serienbrief oder '.
+                                  'Ankündigung verwendet werden können.')
+                    ),
+                    array(
+                        'icon' => 'icons/16/black/code.png',
+                        'text' => _('Im Vorlagentext verwendete Marker werden '.
+                                  'später automatisch beim Nachrichtenversand '.
+                                  'oder beim Erstellen der Ankündigung durch '.
+                                  'die konkreten Werte ersetzt. Welche Marker '.
+                                  'es genau gibt, sehen Sie beim Bearbeiten '.
+                                  'oder Erstellen einer Textvorlage.')
+                    )
+                ),
+                'kategorie' => _('Aktionen'),
+                'eintrag'   => array(
+                    array(
+                        'icon' => 'icons/16/black/add.png',
+                        'text' => '<a href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
+                                  _('Neue Textvorlage anlegen').'</a>'
+                    )
+                )
+            )
+        );
         echo $layout->render();
     }
 
