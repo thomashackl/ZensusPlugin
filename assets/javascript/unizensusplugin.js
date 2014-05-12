@@ -6,21 +6,24 @@ STUDIP.UnizensusPlugin = {
             var error = [];
             var nameInput = $('input[name="name"]');
             if (nameInput.val() == '') {
-                error[0] = 'Bitte geben Sie einen Namen für die Vorlage an!';
+                error.push('Bitte geben Sie einen Namen für die Vorlage an!');
                 success = false;
             }
             var subjectInput = $('input[name="subject"]');
             if (subjectInput.val() == '') {
-                error[1] = 'Bitte geben Sie einen Betreff für die Vorlage an!';
+                error.push('Bitte geben Sie einen Betreff für die Vorlage an!');
                 success = false;
             }
             var msgInput = $('textarea[name="message"]');
             if (msgInput.val() == '') {
-                error[2] = 'Bitte geben Sie einen Nachrichtentext für die Vorlage an!';
+                error.push('Bitte geben Sie einen Nachrichtentext für die Vorlage an!');
                 success = false;
             }
             if (!success) {
-                $('div#error').addClass('messagebox').addClass('messagebox_error').html(error.join('<br>'));
+                $('div#error_message').
+                    addClass('messagebox').
+                    addClass('messagebox_error').
+                    html(error.join(' - '));
             }
             return success;
         });
