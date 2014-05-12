@@ -1,3 +1,4 @@
+<?php use Studip\Button; ?>
 <form class="studip_form" action="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'templates') ?>" method="post"/>
     <div>
         <label class="caption" for="name">
