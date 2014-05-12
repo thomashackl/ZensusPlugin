@@ -533,7 +533,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 'kategorie' => _('Informationen'),
                 'eintrag'   => array(
                     array(
-                        'icon' => 'icons/16/black/edit-small.png',
+                        'icon' => 'icons/16/black/edit.png',
                         'text' => _('Neben den Standard-Stud.IP-'.
                                     'Textformatierungen können Sie hier auch '.
                                     'Marker verwenden, die später beim '.
