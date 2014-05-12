@@ -29,36 +29,6 @@ class UnizensusTextTemplate extends SimpleORMap
         return $templates;
     }
 
-    public function getMarkers() {
-        return array(
-            'EVALUATION_START' => array(
-                'description' => _('Beginn des Evaluationszeitraums'),
-                'replace' => 'date("d.m.Y", $timeframe[0])'
-            ),
-            'EVALUATION_END' => array(
-                'description' => _('Ende des Evaluationszeitraums'),
-                'replace' => 'date("d.m.Y", $timeframe[1])'
-            ),
-            'COURSENUMBER' => array(
-                'description' => _('Veranstaltungsnummer'),
-                'replace' => '$course->number'
-            ),
-            'COURSETYPE' => array(
-                'description' => _('Veranstaltungstyp'),
-                'replace' => '$GLOBALS["SEM_TYPE"][$course->status]["name"]'
-            ),
-            'COURSENAME' => array(
-                'description' => _('Titel der Veranstaltung'),
-                'replace' => '$course->name'
-            ),
-            'COURSELINK' => array(
-                'description' => _('Stud.IP-Link zur Veranstaltung'),
-                'replace' => 'URLHelper::getLink("seminar_main.php", array("auswahl" => $course->id)'
-            )
-        );
-
-    }
-
     public function createText($courseId, $tplId) {
         $course = Course::find($courseId);
         $tpl = new UnizensusTextTemplate($tplId);
