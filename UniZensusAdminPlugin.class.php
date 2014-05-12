@@ -462,6 +462,25 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         $layout = $GLOBALS['template_factory']->open('layouts/base');
         $template = $this->factory->open('templates');
+
+        if (Request::submitted('save_template')) {
+            CSRFProtection::verifyUnsafeRequest();
+            if (Request::option('tpl')) {
+                $tpl = UnizensusTextTemplate::find(Request::option('tpl'));
+            } else {
+                $tpl = new UnizensusTextTemplate();
+            }
+            $tpl->name = trim(Request::get('name'));
+            $tpl->subject = trim(Request::get('subject'));
+            $tpl->message = trim(Request::get('message'));
+            if ($tpl->store()) {
+                $message = MessageBox::success(_('Die Textvorlage wurde gespeichert.'));
+            } else {
+                $message = MessageBox::error(_('Die Textvorlage konnte nicht gespeichert werden.'));
+            }
+            $template->set_attribute('message', $messsage);
+        }
+
         $template->set_attribute('plugin', $this);
 
         $layout->content_for_layout = $template->render();
