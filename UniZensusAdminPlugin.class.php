@@ -436,6 +436,9 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         echo $layout->render();
     }
 
+    /**
+     * Shows all text templates.
+     */
     function templates_action() {
         Navigation::activateItem('/UniZensusAdmin/sub/templates');
         PageLayout::setTitle($this->getDisplayname().' - '._('Textvorlagen'));
@@ -443,6 +446,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $layout = $GLOBALS['template_factory']->open('layouts/base');
         $template = $this->factory->open('templates');
 
+        // We come from template editing - check and save data.
         if (Request::submitted('save_template')) {
             CSRFProtection::verifyUnsafeRequest();
             if (Request::option('tpl')) {
@@ -505,6 +509,9 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         echo $layout->render();
     }
 
+    /**
+     * Action for editing an existing or creating a new text template.
+     */
     public function edit_template_action() {
         Navigation::activateItem('/UniZensusAdmin/sub/templates');
         PageLayout::setTitle($this->getDisplayname().' - '._('Textvorlage bearbeiten'));
@@ -744,17 +751,25 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $rp->assignPluginRoles($plugin_id, range(1,7));
     }
 
+    /**
+     * Sends messages to members of selected courses.
+     */
     public function sendMessage() {
+        // A text template was selected.
         if (Request::option('studipform_text_template')) {
+            // Courses have been chosen.
             if (Request::getArray('sem_choosen')) {
                 $sent = array();
                 $failed = array();
                 $m = new Message();
                 $t = Request::option('studipform_text_template');
+                // Proceed through selected courses.
                 foreach (array_keys(Request::getArray('sem_choosen')) as $s) {
                     $text = UnizensusTextTemplate::createText($s, $t);
+                    // Get all members of the current course.
                     $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
                     if ($members) {
+                        // If Garuda plugin with almighty message sending powers is present, use it.
                         if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
                             require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php');
                             if (GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
@@ -762,6 +777,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                             } else {
                                 $failed[] = $s;
                             }
+                        // No Garuda - we are forsaken! Use normal messaging.
                         } else {
                             if ($m->send($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
                                 $sent[] = $s;
@@ -773,6 +789,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                         $failed[] = $s;
                     }
                 }
+                // Show summary for all successfully processed courses.
                 if ($sent) {
                     if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
                         echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen zum Versand übergeben.'), sizeof($sent)));
@@ -780,16 +797,23 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                         echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen verschickt.'), sizeof($sent)));
                     }
                 }
+                // Show summary for all failures. Here we need details - which courses have failed?
                 if ($failed) {
                     echo MessageBox::success(_('Fehler beim Nachrichtenversand in folgenden Veranstaltungen:'),
                         array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
                 }
+            // No courses selected, so whom to send to?
             } else {
                 echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
             }
+        // No template selected, so what to send?
         } else {
             echo MessageBox::error(_('Bitte wählen Sie eine Textvorlage aus. Evtl. müssen Sie erst eine neue Vorlage anlegen.'));
         }
+    }
+
+    public function createNews() {
+        
     }
 
 }
