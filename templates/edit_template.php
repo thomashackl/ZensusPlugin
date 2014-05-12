@@ -8,6 +8,7 @@
         '<b>COURSETYPE</b>: '._('Typ der Veranstaltung'),
         '<b>COURSENUMBER</b>: '._('Veranstaltungsnummer'),
         '<b>COURSELINK</b>: '._('Stud.IP-interner Link zur Evaluation innerhalb der Veranstaltung'))) ?>
+<div id="error_message"></div>
 <form name="edit_template_form" class="studip_form" action="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'templates') ?>" method="post"/>
     <div>
         <label class="caption" for="name">

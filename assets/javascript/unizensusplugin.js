@@ -3,23 +3,24 @@ STUDIP.UnizensusPlugin = {
     init: function() {
         $('button[name="submit"]').bind('click', function(event) {
             var success = true;
+            var error = [];
             var nameInput = $('input[name="name"]');
             if (nameInput.val() == '') {
-                nameInput.before('<div class="message_error">Bitte geben Sie einen Namen für die Vorlage an!</div>');
+                error[0] = 'Bitte geben Sie einen Namen für die Vorlage an!';
                 success = false;
             }
             var subjectInput = $('input[name="subject"]');
             if (subjectInput.val() == '') {
-                subjectInput.before('<div class="message_error">Bitte geben Sie einen Betreff für die Vorlage an!</div>');
+                error[1] = 'Bitte geben Sie einen Betreff für die Vorlage an!';
                 success = false;
             }
             var msgInput = $('textarea[name="message"]');
             if (msgInput.val() == '') {
-                msgInput.before('<div class="message_error">Bitte geben Sie einen Nachrichtentext für die Vorlage an!</div>');
+                error[2] = 'Bitte geben Sie einen Nachrichtentext für die Vorlage an!';
                 success = false;
             }
             if (!success) {
-                event.preventDefault();
+                $('div#error').addClass('messagebox').addClass('messagebox_error').html(error.join('<br>'));
             }
             return success;
         });
