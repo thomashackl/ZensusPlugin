@@ -1,7 +1,9 @@
-span.error {
-    border: 1px solid #ddbbba;
+div.message_error {
     background-color: #ffdddc;
-    border-radius: 2px;
-    margin-left: 10px;
-    padding: 2px;
+    border: 1px solid #ddbbba;
+    border-radius: 3px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
 }
