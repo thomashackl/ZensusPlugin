@@ -517,7 +517,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         if (Request::isXhr()) {
             header('Content-Type: text/html;charset=windows-1252');
             header('X-Title', $title);
-            hedaer('X-No-Buttons', 1);
+            header('X-No-Buttons', 1);
         }
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $template = $this->factory->open('edit_template');
