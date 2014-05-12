@@ -493,7 +493,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 'eintrag'   => array(
                     array(
                         'icon' => 'icons/16/blue/add.png',
-                        'text' => '<a class="lightbox" href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
+                        'text' => '<a rel="lightbox" href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
                                   _('Neue Textvorlage anlegen').'</a>'
                     )
                 )
