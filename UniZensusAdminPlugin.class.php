@@ -515,8 +515,9 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             $title = _('Neue Textvorlage anlegen');
         }
         if (Request::isXhr()) {
-            $this->response->add_header('X-Title', $title);
-            $this->response->add_header('X-No-Buttons', 1);
+            header('Content-Type: text/html;charset=windows-1252')
+            header('X-Title', $title);
+            hedaer('X-No-Buttons', 1);
         }
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $template = $this->factory->open('edit_template');
