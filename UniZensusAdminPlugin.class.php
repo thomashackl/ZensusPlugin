@@ -357,7 +357,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                             echo PluginEngine::getLink($this,array('sortby' => $col[2], 'foo' => rand())) . '#zensustable';
                             echo '">'.$col[1].'&nbsp;';
                             if($col[2] == $_SESSION['zensus_admin']['sortby']['field']){
-                                printf('<img src="%s/images/%s" border="0" align="top">', $this->getPluginUrl(),$_SESSION['zensus_admin']['sortby']['direction'] ? 'dreieck_up.png' : 'dreieck_down.png');
+                                printf('<img src="%s/assets/images/%s" border="0" align="top">', $this->getPluginUrl(),$_SESSION['zensus_admin']['sortby']['direction'] ? 'dreieck_up.png' : 'dreieck_down.png');
                             }
                             echo '</a>';
                         }
@@ -509,6 +509,12 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
     public function edit_template_action() {
         Navigation::activateItem('/UniZensusAdmin/sub/templates');
         PageLayout::setTitle($this->getDisplayname().' - '._('Textvorlage bearbeiten'));
+        if (Studip\ENV == 'development') {
+            $js = 'unizensusplugin.js';
+        } else {
+            $js = 'unizensusplugin.js';
+        }
+        PageLayout::addScript($this->getPluginUrl().'/assets/javascript/'.$js);
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $template = $this->factory->open('edit_template');
         $template->set_attribute('plugin', $this);
