@@ -831,6 +831,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     $news = new StudipNews();
                     // ... and assign it to current course.
                     $news->addRange($s);
+                    $news->setValue('author', $GLOBALS['user']->getFullName());
+                    $news->setValue('user_id', $GLOBALS['user']->id);
                     $news->setValue('topic', $text['subject']);
                     $news->setValue('body', $text['text']);
                     // News are valid at once...
