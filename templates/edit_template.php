@@ -4,13 +4,13 @@
         <label class="caption" for="name">
             <?= _('Name') ?>
         </label>
-        <input type="text" name="name" size="75" maxlength="255" value="<?= $tpl->name ?>" placeholder="<?= _('Geben Sie hier einen Namen für die Vorlage ein.') ?>" required="required"/>
+        <input type="text" name="name" size="90" maxlength="255" value="<?= $tpl->name ?>" placeholder="<?= _('Geben Sie hier einen Namen für die Vorlage ein.') ?>" required="required"/>
     </div>
     <div>
         <label class="caption" for="subject">
             <?= _('Betreff') ?>
         </label>
-        <input type="text" name="subject" size="75" maxlength="255" value="<?= $tpl->subject ?>" placeholder="<?= _('Geben Sie hier eine Betreffzeile ein.') ?>" required="required"/>
+        <input type="text" name="subject" size="90" maxlength="255" value="<?= $tpl->subject ?>" placeholder="<?= _('Geben Sie hier eine Betreffzeile ein.') ?>" required="required"/>
     </div>
     <div>
         <label class="caption" for="message">
