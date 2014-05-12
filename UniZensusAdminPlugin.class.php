@@ -544,7 +544,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     array(
                         'icon' => 'icons/16/black/hash.png',
                         'text' => _('Marker werden zwischen jeweils drei '.
-                                    'Hash-Zeichen gesetzt.')
+                                    'Hash-Zeichen gesetzt, also in der Art
+                                    "###MARKER###".')
                     )
                 )
             )
