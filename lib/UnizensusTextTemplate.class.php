@@ -45,6 +45,7 @@ class UnizensusTextTemplate extends SimpleORMap
             if ($status) {
                 $link = $GLOBALS['ABSOLUTE_URI_STUDIP'].'plugins.php/unizensusplugin/show?cid='.$course->id;
             }
+        }
         $markers = array(
             'EVALUATION_START' => array(
                 'description' => _('Beginn des Evaluationszeitraums'),
