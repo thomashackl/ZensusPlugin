@@ -33,6 +33,18 @@ class UnizensusTextTemplate extends SimpleORMap
         $course = Course::find($courseId);
         $tpl = new UnizensusTextTemplate($tplId);
         $timeframe = self::calculateTimeFrame($courseId);
+        $pluginid = DBManager::get()->fetchFirst("SELECT `pluginid`
+            FROM `plugins` WHERE `pluginname`='UniZensusPlugin'");
+        $unizensusid = $pluginid[0];
+        $link = $GLOBALS['ABSOLUTE_URI_STUDIP'].'seminar_main.php?auswahl='.$course->id;
+        if ($unizensusid) {
+            $status = DBManager::get()->fetchOne(
+                "SELECT `state` FROM `plugins_activated`
+                WHERE `poiid`=? AND `state`='on' AND `pluginid`=?",
+                array('sem'.$courseId, $unizensusid));
+            if ($status) {
+                $link = $GLOBALS['ABSOLUTE_URI_STUDIP'].'plugins.php/unizensusplugin/show?cid='.$course->id;
+            }
         $markers = array(
             'EVALUATION_START' => array(
                 'description' => _('Beginn des Evaluationszeitraums'),
@@ -56,7 +68,7 @@ class UnizensusTextTemplate extends SimpleORMap
             ),
             'COURSELINK' => array(
                 'description' => _('Stud.IP-Link zur Veranstaltung'),
-                'replace' => $GLOBALS['ABSOLUTE_URI_STUDIP'].'seminar_main.php?auswahl='.$course->id
+                'replace' => $link
             )
         );
         $subject = $tpl->subject;
