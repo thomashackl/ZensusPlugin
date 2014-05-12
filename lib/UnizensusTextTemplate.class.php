@@ -36,11 +36,11 @@ class UnizensusTextTemplate extends SimpleORMap
         $markers = array(
             'EVALUATION_START' => array(
                 'description' => _('Beginn des Evaluationszeitraums'),
-                'replace' => $timeframe['start']
+                'replace' => date('d.m.Y', $timeframe['start'])
             ),
             'EVALUATION_END' => array(
                 'description' => _('Ende des Evaluationszeitraums'),
-                'replace' => $timeframe['end']
+                'replace' => date('d.m.Y', $timeframe['end'])
             ),
             'COURSENUMBER' => array(
                 'description' => _('Veranstaltungsnummer'),
