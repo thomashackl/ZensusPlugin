@@ -493,7 +493,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 'eintrag'   => array(
                     array(
                         'icon' => 'icons/16/blue/add.png',
-                        'text' => '<a rel="lightbox" href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
+                        'text' => '<a href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
                                   _('Neue Textvorlage anlegen').'</a>'
                     )
                 )
@@ -514,17 +514,38 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             $tpl = new UnizensusTextTemplate();
             $title = _('Neue Textvorlage anlegen');
         }
-        if (Request::isXhr()) {
-            header('Content-Type: text/html;charset=windows-1252');
-            header('X-Title', $title);
-            header('X-No-Buttons', 1);
-        }
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $template = $this->factory->open('edit_template');
         $template->set_attribute('tpl', $tpl);
         $template->set_attribute('plugin', $this);
 
         $layout->content_for_layout = $template->render();
+
+        $infobox_content = array(
+            array(
+                'kategorie' => _('Informationen'),
+                'eintrag'   => array(
+                    array(
+                        'icon' => 'icons/16/black/file-text.png',
+                        'text' => _('Neben den Standard-Stud.IP-'.
+                                    'Textformatierungen können Sie hier auch '.
+                                    'Marker verwenden, die später beim '.
+                                    'Nachrichtenversand bzw. beim Einstellen '.
+                                    'der Ankündigung durch die korrekten '.
+                                    'Daten ersetzt werden.')
+                    ),
+                    array(
+                        'icon' => 'icons/16/black/hash.png',
+                        'text' => _('Marker werden zwischen jeweils drei '.
+                                    'Hash-Zeichen gesetzt.')
+                    )
+                )
+            )
+        );
+        $infobox = $GLOBALS['template_factory']->open('infobox/infobox_generic_content.php');
+        $infobox->picture = 'infobox/contract.jpg';
+        $infobox->content = $infobox_content;
+        $layout->set_attribute('infobox', $infobox->render());
         echo $layout->render();
     }
 

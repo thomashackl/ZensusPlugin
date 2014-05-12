@@ -1,4 +1,12 @@
 <?php use Studip\Button; ?>
+<?= MessageBox::info('Folgende Marker können verwendet werden:',
+    array(
+        '<b>EVALUATION_START</b>:'._('Beginn des Evaluationszeitraums (pro Veranstaltung)'),
+        '<b>EVALUATION_END</b>:'._('Ende des Evaluationszeitraums (pro Veranstaltung)'),
+        '<b>COURSENAME</b>:'._('Name der Veranstaltung)'),
+        '<b>COURSETYPE</b>:'._('Typ der Veranstaltung'),
+        '<b>COURSENUMBER</b>:'._('Veranstaltungsnummer'),
+        '<b>COURSELINK</b>:'._('Stud.IP-interner Link zur Evaluation innerhalb der Veranstaltung'))) ?>
 <form class="studip_form" action="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'templates') ?>" method="post"/>
     <div>
         <label class="caption" for="name">

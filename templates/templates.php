@@ -15,7 +15,7 @@
             <td valign="top"><?= htmlReady($t['subject']) ?></td>
             <td valign="top"><?= nl2br(htmlReady($t['message'])) ?></td>
             <td valign="top">
-                <a rel="lightbox" href="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten') ?>">
+                <a href="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten') ?>">
                     <?= Assets::img('icons/16/blue/edit.png') ?>
                 </a>
                 <a href="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'delete_template').'" title="'._('Vorlage löschen') ?>">
