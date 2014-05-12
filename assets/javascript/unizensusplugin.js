@@ -23,7 +23,7 @@ STUDIP.UnizensusPlugin = {
                 $('div#error_message').
                     addClass('messagebox').
                     addClass('messagebox_error').
-                    html(error.join(' - '));
+                    html(error.join('<br/>'));
             }
             return success;
         });
