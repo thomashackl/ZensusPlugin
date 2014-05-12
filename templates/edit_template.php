@@ -32,7 +32,7 @@
         <?php if ($tpl) { ?>
         <input type="hidden" name="tpl" value="<?= $tpl->template_id ?>"/>
         <?php } ?>
-        <?= Button::createAccept(_('Vorlage speichern'), 'submit') ?>
+        <?= Button::createAccept(_('Vorlage speichern'), 'save_template') ?>
         <?= Button::createCancel(_('Abbrechen'), 'cancel', array('rel' => 'close_dialog')) ?>
     </div>
 </form>

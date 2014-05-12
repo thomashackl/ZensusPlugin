@@ -1,7 +1,7 @@
 STUDIP.UnizensusPlugin = {
 
     init: function() {
-        $('button[name="submit"]').bind('click', function(event) {
+        $('button[name="save_template"]').bind('click', function(event) {
             var success = true;
             var error = [];
             var nameInput = $('input[name="name"]');
