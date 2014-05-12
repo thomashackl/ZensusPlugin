@@ -1,3 +1,4 @@
+<h1><?= $tpl ? _('Textvorlage bearbeiten') : _('Neue Textvorlage anlegen') ?></h1>
 <?php use Studip\Button; ?>
 <?= MessageBox::info('Folgende Marker können verwendet werden:',
     array(
