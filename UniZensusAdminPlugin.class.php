@@ -839,7 +839,12 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     $start = time();
                     $news->setValue('date', $start);
                     // .. until evaluation end or 2 weeks, whatever comes first.
-                    $expires = min(($text['timeframe']['end']-$start), 2*7*24*60*60);
+                    if ($text['timeframe']['end']) {
+                        $expiry = $text['timeframe']['end']-$start;
+                    } else {
+                        $expiry = 2*7*24*60*60;
+                    }
+                    $expires = $expiry;
                     $news->setValue('expire', $expires);
                     if ($news->store()) {
                         $created[] = $s;
