@@ -509,8 +509,15 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
     public function edit_template_action() {
         if (Request::option('tpl')) {
             $tpl = UnizensusTextTemplate::find(Request::option('tpl'));
+            $title = _('Textvorlage bearbeiten');
         } else {
             $tpl = new UnizensusTextTemplate();
+            $title = _('Neue Textvorlage anlegen');
+        }
+        if (Request::isXhr()) {
+            $this->set_content_type('text/html;charset=windows-1252');
+            $this->response->add_header('X-Title', $title);
+            $this->response->add_header('X-No-Buttons', 1);
         }
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $template = $this->factory->open('edit_template');

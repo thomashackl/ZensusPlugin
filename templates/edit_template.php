@@ -23,6 +23,6 @@
         <input type="hidden" name="tpl" value="<?= $tpl->template_id ?>"/>
         <?php } ?>
         <?= Button::createAccept(_('Vorlage speichern'), 'submit') ?>
-        <?= Button::createCancel(_('Abbrechen'), 'cancel') ?>
+        <?= Button::createCancel(_('Abbrechen'), 'cancel', array('rel' => 'close_dialog')) ?>
     </div>
 </form>
