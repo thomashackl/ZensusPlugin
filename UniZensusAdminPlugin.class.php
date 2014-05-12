@@ -462,6 +462,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         $layout = $GLOBALS['template_factory']->open('layouts/base');
         $template = $this->factory->open('templates');
+        $template->set_attribute('plugin', $this);
 
         $layout->content_for_layout = $template->render();
 
@@ -492,7 +493,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 'eintrag'   => array(
                     array(
                         'icon' => 'icons/16/blue/add.png',
-                        'text' => '<a href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
+                        'text' => '<a class="lightbox" href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
                                   _('Neue Textvorlage anlegen').'</a>'
                     )
                 )
@@ -503,6 +504,20 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $infobox->content = $infobox_content;
         $layout->set_attribute('infobox', $infobox->render());
         echo $layout->render();
+    }
+
+    public function edit_template_action() {
+        if (Request::option('tpl')) {
+            $tpl = UnizensusTextTemplate::find(Request::option('tpl'));
+        } else {
+            $tpl = new UnizensusTextTemplate();
+        }
+        $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+        $template = $this->factory->open('edit_template');
+        $template->set_attribute('tpl', $tpl);
+        $template->set_attribute('action', PluginEngine::getLink($this, array('tpl' => $t['template_id']), 'edit_template'));
+
+        $layout->content_for_layout = $template->render();
     }
 
     function getInstitute($seminare_condition){
