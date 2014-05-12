@@ -78,7 +78,7 @@ class UnizensusTextTemplate extends SimpleORMap
             $subject = str_replace('###'.$marker.'###', $data['replace'], $subject);
             $text = str_replace('###'.$marker.'###', $data['replace'], $text);
         }
-        return array('subject' => $subject, 'text' => $text);
+        return array('subject' => $subject, 'text' => $text, 'timeframe' => $timeframe);
     }
 
     public static function calculateTimeFrame($courseId) {

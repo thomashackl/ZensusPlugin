@@ -813,7 +813,51 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
     }
 
     public function createNews() {
-        
+        // A text template was selected.
+        if (Request::option('studipform_text_template')) {
+            // Courses have been chosen.
+            if (Request::getArray('sem_choosen')) {
+                $created = array();
+                $failed = array();
+                $t = Request::option('studipform_text_template');
+                // Proceed through selected courses.
+                foreach (array_keys(Request::getArray('sem_choosen')) as $s) {
+                    $text = UnizensusTextTemplate::createText($s, $t);
+                    // Create new news entry...
+                    $news = new StudipNews();
+                    // ... and assign it to current course.
+                    $news->addRange($s);
+                    $news->setValue('topic', $text['subject']);
+                    $news->setValue('body', $text['text']);
+                    // News are valid at once...
+                    $start = time();
+                    $news->setValue('date', $start);
+                    // .. until evaluation end or 2 weeks, whatever comes first.
+                    $expires = min(($text['timeframe']['end']-$start), 2*7*24*60*60);
+                    $news->setValue('expire', $expires);
+                    if ($news->store()) {
+                        $created[] = $s;
+                    } else {
+                        $failed[] = $s;
+                    }
+                }
+                // Show summary for all successfully processed courses.
+                if ($created) {
+                    echo MessageBox::success(sprintf(_('Die Ankündigung wurde in %s Veranstaltungen eingestellt.'), sizeof($created)));
+                }
+                // Show summary for all failures. Here we need details - which courses have failed?
+                if ($failed) {
+                    echo MessageBox::success(_('Die Ankündigung konnte in folgenden Veranstaltungen nicht erstellt werden:'),
+                        array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
+                }
+            // No courses selected, so whom to send to?
+            } else {
+                echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
+            }
+        // No template selected, so what to send?
+        } else {
+            echo MessageBox::error(_('Bitte wählen Sie eine Textvorlage aus. Evtl. müssen Sie erst eine neue Vorlage anlegen.'));
+        }
     }
 
 }
