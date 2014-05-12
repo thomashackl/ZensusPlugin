@@ -185,6 +185,10 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             $this->sendMessage();
         }
 
+        if ($form->isClicked('create_news')) {
+            $this->createNews();
+        }
+
         if (Request::submitted('choose_institut')) {
             $_SESSION['_default_sem'] = Request::option('select_sem', $_SESSION['_default_sem']);
             $_SESSION['zensus_admin']['check_eval'] = isset($_REQUEST['check_eval']);
