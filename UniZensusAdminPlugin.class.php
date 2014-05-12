@@ -61,6 +61,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             }
             $info = PluginManager::getInstance()->getPluginInfo('unizensusplugin');
             $this->zensuspluginid = $info['id'];
+            $this->factory = new Flexi_TemplateFactory(realpath(dirname(__FILE__).'/templates'));
         }
 
     }
@@ -457,40 +458,12 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
     function templates_action() {
         Navigation::activateItem('/UniZensusAdmin/sub/templates');
-        ob_start();
-        echo '<table class="default" width="100%">';
-        echo '<caption>'._('Textvorlagen für Nachrichten und Ankündigungen').'</caption>';
-        echo '<thead>';
-        echo '<tr>';
-        echo '<th width="20%">'._('Name').'</th>';
-        echo '<th width="25%">'._('Betreff').'</th>';
-        echo '<th>'._('Text').'</th>';
-        echo '<th width=40">'._('Aktionen').'</th>';
-        echo '</tr>';
-        echo '</thead>';
-        echo '<tbody>';
-        foreach (UnizensusTextTemplate::getAll() as $t) {
-            echo '<tr>';
-            echo '<td valign="top">'.htmlReady($t['name']).'</td>';
-            echo '<td valign="top">'.htmlReady($t['subject']).'</td>';
-            echo '<td valign="top">'.nl2br(htmlReady($t['message'])).'</td>';
-            echo '<td valign="top">';
-            echo '<a href="'.PluginEngine::getLink($this, array('tpl' => $t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten').'">';
-            echo Assets::img('icons/16/blue/edit.png');
-            echo '</a>';
-            echo '<a href="'.PluginEngine::getLink($this, array('tpl' => $t['template_id']), 'delete_template').'" title="'._('Vorlage löschen').'">';
-            echo Assets::img('icons/16/blue/trash.png');
-            echo '</a>';
-            echo '</td>';
-            echo '<tr>';
-        }
-        echo '</tbody>';
-        echo '</table>';
         PageLayout::setTitle($this->getDisplayname());
 
         $layout = $GLOBALS['template_factory']->open('layouts/base');
+        $template = $this->factory->open('templates');
 
-        $layout->content_for_layout = ob_get_clean();
+        $layout->content_for_layout = $template->render();
 
         $infobox_content = array(
             array(
