@@ -458,7 +458,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
     function templates_action() {
         Navigation::activateItem('/UniZensusAdmin/sub/templates');
-        PageLayout::setTitle($this->getDisplayname());
+        PageLayout::setTitle($this->getDisplayname().' - '._('Textvorlagen'));
 
         $layout = $GLOBALS['template_factory']->open('layouts/base');
         $template = $this->factory->open('templates');
@@ -507,6 +507,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
     }
 
     public function edit_template_action() {
+        Navigation::activateItem('/UniZensusAdmin/sub/templates');
+        PageLayout::setTitle($this->getDisplayname().' - '._('Textvorlage bearbeiten'));
         if (Request::option('tpl')) {
             $tpl = UnizensusTextTemplate::find(Request::option('tpl'));
             $title = _('Textvorlage bearbeiten');
