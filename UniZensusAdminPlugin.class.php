@@ -515,7 +515,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $template = $this->factory->open('edit_template');
         $template->set_attribute('tpl', $tpl);
-        $template->set_attribute('action', PluginEngine::getLink($this, array('tpl' => $t['template_id']), 'edit_template'));
+        $template->set_attribute('plugin', $this);
 
         $layout->content_for_layout = $template->render();
     }
