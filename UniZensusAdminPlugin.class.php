@@ -511,10 +511,13 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         PageLayout::setTitle($this->getDisplayname().' - '._('Textvorlage bearbeiten'));
         if (Studip\ENV == 'development') {
             $js = 'unizensusplugin.js';
+            $css = 'unizensusplugin.css';
         } else {
-            $js = 'unizensusplugin.js';
+            $js = 'unizensusplugin.min.js';
+            $css = 'unizensusplugin.min.css';
         }
         PageLayout::addScript($this->getPluginUrl().'/assets/javascript/'.$js);
+        PageLayout::addStylesheet($this->getPluginUrl().'/assets/stylesheets/'.$css);
         $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
         $template = $this->factory->open('edit_template');
         $template->set_attribute('plugin', $this);
@@ -530,7 +533,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 'kategorie' => _('Informationen'),
                 'eintrag'   => array(
                     array(
-                        'icon' => 'icons/16/black/file-text.png',
+                        'icon' => 'icons/16/black/edit-small.png',
                         'text' => _('Neben den Standard-Stud.IP-'.
                                     'Textformatierungen können Sie hier auch '.
                                     'Marker verwenden, die später beim '.

@@ -1,0 +1,7 @@
+span.error {
+    border: 1px solid #ddbbba;
+    background-color: #ffdddc;
+    border-radius: 2px;
+    margin-left: 10px;
+    padding: 2px;
+}
