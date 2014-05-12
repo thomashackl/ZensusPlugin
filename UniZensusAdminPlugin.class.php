@@ -518,6 +518,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $template->set_attribute('plugin', $this);
 
         $layout->content_for_layout = $template->render();
+        echo $layout->render();
     }
 
     function getInstitute($seminare_condition){
