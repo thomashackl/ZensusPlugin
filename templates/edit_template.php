@@ -32,7 +32,7 @@
         <?php if ($tpl) { ?>
         <input type="hidden" name="tpl" value="<?= $tpl->template_id ?>"/>
         <?php } ?>
-        <?= CSRFProtection::createTokenTag(); ?>
+        <?= CSRFProtection::tokenTag(); ?>
         <?= Button::createAccept(_('Vorlage speichern'), 'save_template') ?>
         <?= Button::createCancel(_('Abbrechen'), 'cancel', array('rel' => 'close_dialog')) ?>
     </div>
