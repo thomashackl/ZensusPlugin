@@ -182,47 +182,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         }
 
         if ($form->isClicked('send_message')) {
-            if (Request::option('studipform_text_template')) {
-                if (Request::getArray('sem_choosen')) {
-                    $sent = array();
-                    $failed = array();
-                    $m = new Message();
-                    $t = Request::option('studipform_text_template');
-                    foreach (array_keys(Request::getArray('sem_choosen')) as $s) {
-                        $text = UnizensusTextTemplate::createText($s, $t);
-                        $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
-                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
-                            require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php');
-                            if (GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
-                                $sent[] = $s;
-                            } else {
-                                $failed[] = $s;
-                            }
-                        } else {
-                            if ($m->send($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
-                                $sent[] = $s;
-                            } else {
-                                $failed = $s;
-                            }
-                        }
-                    }
-                    if ($sent) {
-                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
-                            echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen zum Versand übergeben.'), sizeof($sent)));
-                        } else {
-                            echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen verschickt.'), sizeof($sent)));
-                        }
-                    }
-                    if ($failed) {
-                        echo MessageBox::success(_('Fehler beim Nachrichtenversand in folgenden Veranstaltungen:'),
-                            array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
-                    }
-                } else {
-                    echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
-                }
-            } else {
-                echo MessageBox::error(_('Bitte wählen Sie eine Textvorlage aus. Evtl. müssen Sie erst eine neue Vorlage anlegen.'));
-            }
+            $this->sendMessage();
         }
 
         if (Request::submitted('choose_institut')) {
@@ -782,6 +742,54 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         //allow for nobody
         $rp = new RolePersistence();
         $rp->assignPluginRoles($plugin_id, range(1,7));
+    }
+
+    public function sendMessage() {
+        if (Request::option('studipform_text_template')) {
+            if (Request::getArray('sem_choosen')) {
+                $sent = array();
+                $failed = array();
+                $m = new Message();
+                $t = Request::option('studipform_text_template');
+                foreach (array_keys(Request::getArray('sem_choosen')) as $s) {
+                    $text = UnizensusTextTemplate::createText($s, $t);
+                    $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
+                    if ($members) {
+                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
+                            require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php');
+                            if (GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
+                                $sent[] = $s;
+                            } else {
+                                $failed[] = $s;
+                            }
+                        } else {
+                            if ($m->send($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
+                                $sent[] = $s;
+                            } else {
+                                $failed[] = $s;
+                            }
+                        }
+                    } else {
+                        $failed[] = $s;
+                    }
+                }
+                if ($sent) {
+                    if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
+                        echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen zum Versand übergeben.'), sizeof($sent)));
+                    } else {
+                        echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen verschickt.'), sizeof($sent)));
+                    }
+                }
+                if ($failed) {
+                    echo MessageBox::success(_('Fehler beim Nachrichtenversand in folgenden Veranstaltungen:'),
+                        array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
+                }
+            } else {
+                echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
+            }
+        } else {
+            echo MessageBox::error(_('Bitte wählen Sie eine Textvorlage aus. Evtl. müssen Sie erst eine neue Vorlage anlegen.'));
+        }
     }
 
 }
