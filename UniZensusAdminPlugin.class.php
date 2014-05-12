@@ -191,15 +191,15 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     foreach (array_keys(Request::getArray('sem_choosen')) as $s) {
                         $text = UnizensusTextTemplate::createText($s, $t);
                         $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
-                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/lib/GarudaModel.php')) {
-                            require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/lib/GarudaModel.php');
-                            if (GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['message'])) {
+                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
+                            require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php');
+                            if (GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
                                 $sent[] = $s;
                             } else {
                                 $failed[] = $s;
                             }
                         } else {
-                            if ($m->send($GLOBALS['user']->id, $members, $text['subject'], $text['message'])) {
+                            if ($m->send($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
                                 $sent[] = $s;
                             } else {
                                 $failed = $s;
@@ -207,7 +207,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                         }
                     }
                     if ($sent) {
-                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/lib/GarudaModel.php')) {
+                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
                             echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen zum Versand übergeben.'), sizeof($sent)));
                         } else {
                             echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen verschickt.'), sizeof($sent)));
