@@ -1,4 +1,4 @@
-<?= $message ?: ''?>
+<?= $saved ?: ''?>
 <table class="default" width="100%">
     <caption><?= _('Textvorlagen für Nachrichten und Ankündigungen') ?></caption>
     <thead>
