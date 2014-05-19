@@ -11,7 +11,7 @@ class UniZensusNagScreen extends StudIPPlugin implements SystemPlugin
 
             $content_box = addcslashes(formatReady(Config::get()->UNIZENSUSPLUGIN_NAG_SCREEN_CONTENT),"'\n\r");
             $titel_box = addcslashes(Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME,"'\n\r");
-            $img_url = $this->getPluginUrl($this). '/images/danger.png';
+            $img_url = $this->getPluginUrl($this). '/assets/images/danger.png';
             $script = <<<EOT
 jQuery('document').ready(function(){
     if(jQuery('img[title="Den Fragebogen aufrufen und an der Evaluation teilnehmen"]').length > 0 && jQuery('#UniZensusNagScreenDialogbox').length == 0) {
