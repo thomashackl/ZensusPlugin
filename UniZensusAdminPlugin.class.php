@@ -392,7 +392,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo '<td align="center"><input type="checkbox" name="sem_choosen['.$seminar_id.']" value="1" '.($semdata['choosen'] ? 'checked':'').'></td>';
                 printf ("<td>
                     <a title=\"%s\" href=\"%s\">
-                    %s%s%s
+                    %s%s%s%s
                     </a></td>
                     <td align=\"center\">
                     %s</td>
@@ -407,6 +407,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     ",
                     htmlready($dates),
                     UrlHelper::getLink($semlink.$seminar_id),
+                    (Config::get()->IMPORTANT_SEMNUMBER ? ($semdata['VeranstaltungsNummer'] ? $semdata['VeranstaltungsNummer'].' ' : '') : ''),
                     htmlready(substr($semdata['Name'], 0, 60)),
                     (strlen($semdata['Name'])>60) ? "..." : "",
                     !$semdata['visible'] ? ' ' . _("(versteckt)") : '',
@@ -615,16 +616,22 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         $ret = array();
         list($institut_id, $all) = explode('_', $_SESSION['zensus_admin']['institut_id']);
-        if ($institut_id == "all"  && $perm->have_perm("root"))
-            $query = "SELECT Name,Seminar_id as seminar_id, VeranstaltungsNummer, visible FROM seminare WHERE 1 $seminare_condition ORDER BY Name";
-        elseif ($all == 'all')
+        if ($institut_id == "all"  && $perm->have_perm("root")) {
+            $query = "SELECT Name,Seminar_id as seminar_id, VeranstaltungsNummer, visible FROM seminare WHERE 1 $seminare_condition";
+        } elseif ($all == 'all') {
             $query = "SELECT seminare.Name,seminare.Seminar_id as seminar_id, seminare.VeranstaltungsNummer, seminare.visible FROM seminare LEFT JOIN seminar_inst USING (Institut_id)
         INNER JOIN Institute ON seminar_inst.institut_id = Institute.Institut_id WHERE Institute.fakultaets_id  = '{$institut_id}' $seminare_condition
-        GROUP BY seminare.Seminar_id ORDER BY Name";
-        else
+        GROUP BY seminare.Seminar_id";
+        } else {
         $query = "SELECT seminare.Name,seminare.Seminar_id as seminar_id, seminare.VeranstaltungsNummer, seminare.visible FROM seminare LEFT JOIN seminar_inst USING (Institut_id)
         WHERE seminar_inst.institut_id = '{$institut_id}' $seminare_condition
-        GROUP BY seminare.Seminar_id ORDER BY Name";
+        GROUP BY seminare.Seminar_id";
+        }
+        if (Config::get()->IMPORTANT_SEMNUMBER) {
+            $query .= "ORDER BY VeranstaltungsNummer, Name";
+        } else {
+            $query .= "ORDER BY Name";
+        }
         $db->query($query);
         while($db->next_record()){
             $seminar_id = $db->f("seminar_id");
