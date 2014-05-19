@@ -628,9 +628,9 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         GROUP BY seminare.Seminar_id";
         }
         if (Config::get()->IMPORTANT_SEMNUMBER) {
-            $query .= "ORDER BY VeranstaltungsNummer, Name";
+            $query .= " ORDER BY VeranstaltungsNummer, Name";
         } else {
-            $query .= "ORDER BY Name";
+            $query .= " ORDER BY Name";
         }
         $db->query($query);
         while($db->next_record()){
