@@ -117,16 +117,17 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         ob_start();
         $cols = array();
         $cols[] = array(1,'','');
-        $cols[] = array(30,_("Veranstaltung"),'Name');
-        $cols[] = array(15,_("Dozenten"),'dozenten');
+        $cols[] = array(5,_("Nummer"),'VeranstaltungsNummer');
+        $cols[] = array(29,_("Veranstaltung"),'Name');
+        $cols[] = array(13,_("Dozenten"),'dozenten');
         $cols[] = array(5,_("&sum; Stud.IP"),'teilnehmer_anzahl_aktuell');
         $cols[] = array(5,_("Zensus Status"),'zensus_status');
         $cols[] = array(5,_("&sum; Zensus"),'zensus_numvotes');
         $cols[] = array(5,_("Plugin aktiv"),'plugin_activated');
-        $cols[] = array(10,_("Startzeit manuell"),'begin_evaluation');
-        $cols[] = array(10,_("Endzeit manuell"),'end_evaluation');
-        $cols[] = array(10,_("Startzeit automatisch"),'time_frame_begin');
-        $cols[] = array(10,_("Endzeit automatisch"),'time_frame_end');
+        $cols[] = array(8,_("Startzeit manuell"),'begin_evaluation');
+        $cols[] = array(8,_("Endzeit manuell"),'end_evaluation');
+        $cols[] = array(8,_("Startzeit automatisch"),'time_frame_begin');
+        $cols[] = array(8,_("Endzeit automatisch"),'time_frame_end');
 
         $form_fields['starttime']  = array('type' => 'text');
         $form_fields['starttime']['attributes'] = array('size'=>10, 'onMouseOver' => 'jQuery(this).datepicker();');
@@ -392,7 +393,11 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo '<td align="center"><input type="checkbox" name="sem_choosen['.$seminar_id.']" value="1" '.($semdata['choosen'] ? 'checked':'').'></td>';
                 printf ("<td>
                     <a title=\"%s\" href=\"%s\">
-                    %s%s%s%s
+                    %s
+                    </a></td>
+                    <td>
+                    <a title=\"%s\" href=\"%s\">
+                    %s%s%s
                     </a></td>
                     <td align=\"center\">
                     %s</td>
@@ -408,6 +413,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     htmlready($dates),
                     UrlHelper::getLink($semlink.$seminar_id),
                     (Config::get()->IMPORTANT_SEMNUMBER ? ($semdata['VeranstaltungsNummer'] ? $semdata['VeranstaltungsNummer'].' ' : '') : ''),
+                    htmlready($dates),
+                    UrlHelper::getLink($semlink.$seminar_id),
                     htmlready(substr($semdata['Name'], 0, 60)),
                     (strlen($semdata['Name'])>60) ? "..." : "",
                     !$semdata['visible'] ? ' ' . _("(versteckt)") : '',
