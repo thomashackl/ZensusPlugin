@@ -233,6 +233,17 @@ function zensus_export_range($range_id, $ex_sem, $o_mode = 'direct', $auth_uid =
             zensus_export_inst( $db->f("Institut_id"), $db->f("Seminar_id") , $o_mode);
         }
 
+        //    Ist die Range-ID eine VeranstaltungsNummer?
+        $number_query = "SELECT * FROM seminare WHERE VeranstaltungsNummer = :value";
+        if (isset($ex_sem) && $semester = Semester::find($ex_sem)){
+            $number_query .= " AND start_time <= :semester AND (:semester <= (start_time + duration_time) OR duration_time = -1)";
+        }
+        $courses = DBManager::get()->fetchAll($number_query, array('value' => $range_id, 'semester' => $semester->beginn));
+        foreach ($courses as $c) {
+            if ($c["Name"] != "") {
+                zensus_export_inst( $c["Institut_id"], $c["Seminar_id"] , $o_mode);
+            }
+        }
 
         //    Ist die Range-ID ein Range-Tree-Item?
         if($range_id != 'root'){
