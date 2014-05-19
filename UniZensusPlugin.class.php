@@ -27,8 +27,8 @@ class UniZensusPlugin extends AbstractStudIPStandardPlugin {
      */
     function UniZensusPlugin(){
         AbstractStudIPStandardPlugin::AbstractStudIPStandardPlugin();
-        $this->setPluginiconname('images/16_white_evaluation.png');
-        $this->setChangeindicatoriconname('images/16_red_new_evaluation.png');
+        $this->setPluginiconname('assets/images/16_white_evaluation.png');
+        $this->setChangeindicatoriconname('assets/images/16_red_new_evaluation.png');
         $this->RPC = new UniZensusRPC();
         if ($this->isVisible()){
             $tab = new PluginNavigation();
@@ -84,7 +84,7 @@ class UniZensusPlugin extends AbstractStudIPStandardPlugin {
 
     function isShownInOverview(){
         if ($GLOBALS['UNIZENSUSPLUGIN_SHOWN_IN_OVERVIEW'] && $this->isVisible()) {
-            $this->setPluginiconname('images/16_grey_evaluation.png');
+            $this->setPluginiconname('assets/images/16_grey_evaluation.png');
             return true;
         }
 
