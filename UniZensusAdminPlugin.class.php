@@ -220,7 +220,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                         $_SESSION['zensus_admin']['sortby']['direction'] = (int)!$_SESSION['zensus_admin']['sortby']['direction'];
                     } else {
                         $_SESSION['zensus_admin']['sortby']['field'] = $_REQUEST['sortby'];
-                        $_SESSION['zensus_admin']['sortby']['direction'] = 0;
+                        $_SESSION['zensus_admin']['sortby']['direction'] = 1;
                     }
                     break;
                 }
@@ -778,6 +778,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             // Courses have been chosen.
             if (Request::getArray('sem_choosen')) {
                 $sent = array();
+                $recipients = 0;
                 $failed = array();
                 $m = new Message();
                 $t = Request::option('studipform_text_template');
@@ -792,6 +793,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                             require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php');
                             if (GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
                                 $sent[] = $s;
+                                $recipients += sizeof($members);
                             } else {
                                 $failed[] = $s;
                             }
@@ -799,6 +801,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                         } else {
                             if ($m->send($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
                                 $sent[] = $s;
+                                $recipients += sizeof($members);
                             } else {
                                 $failed[] = $s;
                             }
@@ -810,9 +813,9 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 // Show summary for all successfully processed courses.
                 if ($sent) {
                     if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
-                        echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen zum Versand übergeben.'), sizeof($sent)));
+                        echo MessageBox::success(sprintf(_('Die Nachricht an %s Personen in %s Veranstaltungen wurde an das System zum Versand übergeben.'), $recipients, sizeof($sent)));
                     } else {
-                        echo MessageBox::success(sprintf(_('Die Nachricht wurde für %s Veranstaltungen verschickt.'), sizeof($sent)));
+                        echo MessageBox::success(sprintf(_('Die Nachricht an %s Personen in %s Veranstaltungen wurde verschickt.'), $recipients, sizeof($sent)));
                     }
                 }
                 // Show summary for all failures. Here we need details - which courses have failed?
