@@ -745,7 +745,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 $export_error = 'no valid semester found';
             }
         }
-        $range_id = Request::option('range_id', 'root');
+        $range_id = trim(Request::option('range_id', 'root'));
         $ex_only_visible = Request::int('ex_only_visible', 0);
         $ex_only_homeinst = Request::int('ex_only_homeinst', 1);
         $ex_sem_class = Request::intArray('ex_sem_class');
