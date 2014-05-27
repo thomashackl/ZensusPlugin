@@ -107,7 +107,7 @@ class UniZensusPlugin extends AbstractStudIPStandardPlugin {
             ($this->course_status['status']
             && strpos($this->course_status['status'], 'error') === false
             && ( (($this->course_status['preview'] || $this->course_status['questionnaire'] || $this->course_status['pdfdetailfreetexts']
-) && $GLOBALS['perm']->have_studip_perm('autor' , $this->getId()))
+) && $GLOBALS['perm']->have_studip_perm('user' , $this->getId()))
                 )
             && (!isset($this->course_status['time_frame'])
                 || ($this->course_status['time_frame']['begin'] < time()
@@ -269,7 +269,7 @@ class UniZensusPlugin extends AbstractStudIPStandardPlugin {
             echo '</td><td>';
             echo '<div style="font-style:italic; padding-left: 10px;">';
             echo sprintf(_("Diese Teilnehmeranzahl wird zur Auswertung der Evaluation herangezogen. Wenn Sie keinen Wert eingeben, wird die Anzahl der Teilnehmer aus Stud.IP benutzt (zur Zeit: %s).")
-                    , count(Seminar::getInstance($this->getId())->getMembers('autor')));
+                    , count(Seminar::getInstance($this->getId())->getMembers('autor'))+count(Seminar::getInstance($this->getId())->getMembers('user')));
             echo '</div>';
             echo '</td></tr>';
 
@@ -438,7 +438,7 @@ class UniZensusPlugin extends AbstractStudIPStandardPlugin {
                     }
                 }
                 if ($results_available
-                    && $GLOBALS['perm']->get_studip_perm($this->getId()) == 'autor'
+                    && in_array($GLOBALS['perm']->get_studip_perm($this->getId()), array('user', 'autor'))
                     && !$this->course_status['questionnaire']
                     && $additional_data['eval_public_stud']
                     ) {
