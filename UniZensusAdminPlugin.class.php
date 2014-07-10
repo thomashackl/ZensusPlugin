@@ -787,6 +787,16 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     $text = UnizensusTextTemplate::createText($s, $t);
                     // Get all members of the current course.
                     $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
+                    if (Request::option('omit_participated')) {
+                        $not_participated = array();
+                        foreach ($members as $member) {
+                            $status = UnizensusRPC::getCourseStatus($s, $member);
+                            if ($status['status'] == 'run' && $status['questionnaire'] && $status['noquestionnairereason'] != 'user_id voted already') {
+                                $not_participated[] = $member;
+                            }
+                        }
+                        $members = $not_participated;
+                    }
                     if ($members) {
                         // If Garuda plugin with almighty message sending powers is present, use it.
                         if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
