@@ -799,9 +799,9 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     }
                     if ($members) {
                         // If Garuda plugin with almighty message sending powers is present, use it.
-                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
-                            require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php');
-                            if (GarudaModel::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
+                        if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaCronFunctions.php')) {
+                            require_once($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaCronFunctions.php');
+                            if (GarudaCronFunctions::createCronEntry($GLOBALS['user']->id, $members, $text['subject'], $text['text'])) {
                                 $sent[] = $s;
                                 $recipients += sizeof($members);
                             } else {
