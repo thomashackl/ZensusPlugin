@@ -140,6 +140,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             $options[] = array('name' => $t['name'], 'value' => $t['template_id']);
         }
         $form_fields['text_template']['options'] = $options;
+        $form_fields['omit_participated'] = array('type' => 'checkbox');
         $form_buttons['create_news'] = array('name' => 'uebernehmen', 'caption' => _("Ankündigung erstellen"));
         $form_buttons['send_message'] = array('name' => 'uebernehmen', 'caption' => _("Nachricht senden"));
         $form_buttons['set_plugin_status'] = array('name' => 'uebernehmen', 'caption' => _("Plugin ein/ausschalten"));
@@ -329,6 +330,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo chr(10).'<div style="margin:10px;font-size:10pt;">';
                 echo chr(10) . '<label for="text_template">'._('Textvorlage auswählen:').'</label>';
                 echo chr(10) . $form->getFormField('text_template');
+                echo chr(10) . $form->getFormField('omit_participated');
+                echo chr(10) . '<label for="omit_participated">'._('Nur an Personen, die noch nicht teilgenommen haben').'</label>';
                 echo '&nbsp;&nbsp;&nbsp;'. $form->getFormButton('send_message', array('style' => 'vertical-align:middle'));
                 echo '&nbsp;'. $form->getFormButton('create_news', array('style' => 'vertical-align:middle'));
                 echo chr(10). '</div>';
