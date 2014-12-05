@@ -328,10 +328,10 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo chr(10).'<div style="margin:10px;font-size:10pt;font-weight:bold">';
                 echo _("Nachrichten/Ankündigungen für gewählte Veranstaltungen erstellen:") .'</div>';
                 echo chr(10).'<div style="margin:10px;font-size:10pt;">';
-                echo chr(10) . '<label for="text_template">'._('Textvorlage auswählen:').'</label>';
+                echo chr(10) . '<label for="studipform_text_template">'._('Textvorlage auswählen:').'</label>';
                 echo chr(10) . $form->getFormField('text_template');
                 echo chr(10) . $form->getFormField('omit_participated');
-                echo chr(10) . '<label for="omit_participated">'._('Nur an Personen, die noch nicht teilgenommen haben').'</label>';
+                echo chr(10) . '<label for="studipform_omit_participated">'._('Nur an Personen, die noch nicht teilgenommen haben').'</label>';
                 echo '&nbsp;&nbsp;&nbsp;'. $form->getFormButton('send_message', array('style' => 'vertical-align:middle'));
                 echo '&nbsp;'. $form->getFormButton('create_news', array('style' => 'vertical-align:middle'));
                 echo chr(10). '</div>';
@@ -813,13 +813,23 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 $t = Request::option('studipform_text_template');
                 // Proceed through selected courses.
                 foreach (array_keys(Request::getArray('sem_choosen')) as $s) {
+                    $seminar = Seminar::GetInstance($s);
+                    $semester = SemesterData::GetInstance();
+                    if ($seminar->getSemesterDurationTime() == 0) {
+                        $current_sem = $semester->getSemesterDataByDate($seminar->getSemesterStartTime());
+                    } else {
+                        $current_sem = $semester->getCurrentSemesterData();
+                    }
+                    $semester_id = $current_sem['semester_id'];
+                    $zensusid = $semester_id.'_'.$s;
                     $text = UnizensusTextTemplate::createText($s, $t);
                     // Get all members of the current course.
                     $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
-                    if (Request::option('omit_participated')) {
+                    if (Request::option('studipform_omit_participated')) {
                         $not_participated = array();
                         foreach ($members as $member) {
-                            $status = UnizensusRPC::getCourseStatus($s, $member);
+                            $rpc = new UniZensusRPC();
+                            $status = $rpc->getCourseStatus($zensusid, $member);
                             if ($status['status'] == 'run' && $status['questionnaire'] && $status['noquestionnairereason'] != 'user_id voted already') {
                                 $not_participated[] = $member;
                             }
