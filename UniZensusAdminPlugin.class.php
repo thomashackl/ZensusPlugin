@@ -190,7 +190,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             $this->createNews();
         }
 
-        if (Request::submitted('choose_institut')) {
+        if (Request::submitted('choose_institut') || Request::submitted('export')) {
             $_SESSION['_default_sem'] = Request::option('select_sem', $_SESSION['_default_sem']);
             $_SESSION['zensus_admin']['check_eval'] = isset($_REQUEST['check_eval']);
             $_SESSION['zensus_admin']['plugin_activated'] = isset($_REQUEST['plugin_activated']);
@@ -226,7 +226,6 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 }
             }
         }
-
         $_my_inst = $this->getInstitute($sem_condition);
         if (is_array($_my_inst)){
             $_my_inst_arr = array_keys($_my_inst);
@@ -286,6 +285,10 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             <input type="checkbox" id="plugin_activated" name="plugin_activated" <?=$_SESSION['zensus_admin']['plugin_activated'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">
             &nbsp;<label for="plugin_activated"><?=_("Plugin eingeschaltet")?></label>
             </span>
+            </div>
+            <div style="font-size:10pt;margin:10px;">
+            <b><?=_("Angezeigte Veranstaltungen exportieren:")?></b>
+            <?= \Studip\Button::create(_("Export"), 'export'); ?>
             </div>
             </form>
             <hr>
@@ -381,6 +384,29 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             }
             if($_SESSION['zensus_admin']['sortby']['field'] && count($data) && count($data) == count($sorter)){
                 array_multisort($sorter, ($_SESSION['zensus_admin']['sortby']['direction'] ? SORT_ASC : SORT_DESC), $data);
+            }
+            if (Request::submitted('export')) {
+                ob_end_clean();
+                $captions = array('Veranstaltung', 'Dozenten', 'Teilnehmer Stud.IP', 'Zensus Status', 'Teilnehmer Zensus', 'Plugin aktiv', 'Startzeit','Endzeit');
+                $csvdata = array();
+                $c = 0;
+                foreach($data as $seminar_id => $semdata) {
+                    $csvdata[$c][] = $semdata['Name'];
+                    $csvdata[$c][] = $semdata['dozenten'];
+                    $csvdata[$c][] = $semdata['teilnehmer_anzahl_aktuell'];
+                    $csvdata[$c][] = $semdata['zensus_status'];
+                    $csvdata[$c][] = (int)$semdata['zensus_numvotes'];
+                    $csvdata[$c][] = $semdata['plugin_activated'] ? 'ja' : 'nein';
+                    $csvdata[$c][] = $semdata['begin_evaluation'] ? date("d.m.Y", $semdata['begin_evaluation']) : ($semdata['time_frame_begin'] ? date("d.m.Y", $semdata['time_frame_begin']) : '');
+                    $csvdata[$c][] = $semdata['end_evaluation'] ? date("d.m.Y", $semdata['end_evaluation']) : ($semdata['time_frame_end'] ? date("d.m.Y", $semdata['time_frame_end']) : '');
+                    ++$c;
+                }
+                $tmpname = md5(uniqid('tmp'));
+                if (array_to_csv($csvdata, $GLOBALS['TMP_PATH'] . '/' . $tmpname, $captions)) {
+                    header('Location: ' . GetDownloadLink($tmpname, 'Veranstaltungen_Lehrevaluation.csv', 4, 'force'));
+                    page_close();
+                    die();
+                }
             }
             $semlink = $GLOBALS['perm']->have_studip_perm('admin', $_SESSION['zensus_admin']['institut_id']) ? 'seminar_main.php?auswahl=' : 'details.php?sem_id=';
             foreach($data as $seminar_id => $semdata) {
