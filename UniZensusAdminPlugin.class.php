@@ -510,43 +510,18 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         $layout->content_for_layout = $template->render();
 
-        $infobox_content = array(
-            array(
-                'kategorie' => _('Informationen'),
-                'eintrag'   => array(
-                    array(
-                        'icon' => 'icons/16/black/admin.png',
-                        'text' => _('Bearbeiten Sie hier Ihre Textvorlagen, '.
-                                  'die anschließend in ausgewählten '.
-                                  'Veranstaltungen als Serienbrief oder '.
-                                  'Ankündigung verwendet werden können.')
-                    ),
-                    array(
-                        'icon' => 'icons/16/black/code.png',
-                        'text' => _('Im Vorlagentext verwendete Marker werden '.
-                                  'später automatisch beim Nachrichtenversand '.
-                                  'oder beim Erstellen der Ankündigung durch '.
-                                  'die konkreten Werte ersetzt. Welche Marker '.
-                                  'es genau gibt, sehen Sie beim Bearbeiten '.
-                                  'oder Erstellen einer Textvorlage.')
-                    )
-                ),
-            ),
-            array(
-                'kategorie' => _('Aktionen'),
-                'eintrag'   => array(
-                    array(
-                        'icon' => 'icons/16/blue/add.png',
-                        'text' => '<a href="'.PluginEngine::getLink($this, array(), 'edit_template').'">'.
-                                  _('Neue Textvorlage anlegen').'</a>'
-                    )
-                )
-            )
-        );
-        $infobox = $GLOBALS['template_factory']->open('infobox/infobox_generic_content.php');
-        $infobox->picture = 'infobox/contract.jpg';
-        $infobox->content = $infobox_content;
-        $layout->set_attribute('infobox', $infobox->render());
+        $sidebar = Sidebar::get();
+        $actions = new ActionsWidget();
+        $actions->addLink(_('Neue Textvorlage anlegen'), PluginEngine::getLink($this, array(), 'edit_template'),
+            'icons/16/blue/add.png');
+        $sidebar->addWidget($actions);
+        $layout->set_attribute('sidebar', $sidebar);
+        Helpbar::get()->addPlainText('',
+            _('Im Vorlagentext verwendete [nop]###Marker###[/nop] werden '.
+                'später automatisch beim Nachrichtenversand oder beim '.
+                'Erstellen der Ankündigung durch die konkreten Werte ersetzt. '.
+                'Welche Marker es genau gibt, sehen Sie beim Bearbeiten oder '.
+                'Erstellen einer Textvorlage.'));
         echo $layout->render();
     }
 
@@ -565,7 +540,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         }
         PageLayout::addScript($this->getPluginUrl().'/assets/javascript/'.$js);
         PageLayout::addStylesheet($this->getPluginUrl().'/assets/stylesheets/'.$css);
-        $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+        $layout = $GLOBALS['template_factory']->open('layouts/base');
         $template = $this->factory->open('edit_template');
         $template->set_attribute('plugin', $this);
         if (Request::option('tpl')) {
@@ -574,34 +549,34 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         }
 
         $layout->content_for_layout = $template->render();
-
-        $infobox_content = array(
-            array(
-                'kategorie' => _('Informationen'),
-                'eintrag'   => array(
-                    array(
-                        'icon' => 'icons/16/black/edit.png',
-                        'text' => _('Neben den Standard-Stud.IP-'.
-                                    'Textformatierungen können Sie hier auch '.
-                                    'Marker verwenden, die später beim '.
-                                    'Nachrichtenversand bzw. beim Einstellen '.
-                                    'der Ankündigung durch die korrekten '.
-                                    'Daten ersetzt werden.')
-                    ),
-                    array(
-                        'icon' => 'icons/16/black/hash.png',
-                        'text' => _('Marker werden zwischen jeweils drei '.
-                                    'Hash-Zeichen gesetzt, also in der Art
-                                    "###MARKER###".')
-                    )
-                )
-            )
-        );
-        $infobox = $GLOBALS['template_factory']->open('infobox/infobox_generic_content.php');
-        $infobox->picture = 'infobox/contract.jpg';
-        $infobox->content = $infobox_content;
-        $layout->set_attribute('infobox', $infobox->render());
+        Helpbar::get()->addPlainText('',
+            _('Marker werden jeweils zwischen drei Hash-Zeichen gesetzt, also '.
+                'in der Art "[nop]###MARKER###[/nop]"'));
         echo $layout->render();
+    }
+
+    /**
+     * Action for deleting a template (with asking before deletion)
+     */
+    public function delete_template_action() {
+        if (Request::submitted('do_delete')) {
+            CSRFProtection::verifyUnsafeRequest();
+            UnizensusTextTemplate::find(Request::option('tpl'))->delete();
+            header('Location: '.URLHelper::getLink('plugins.php/unizensusadminplugin/templates'));
+        } else {
+            Navigation::activateItem('/UniZensusAdmin/sub/templates');
+            PageLayout::setTitle($this->getDisplayname() . ' - ' . _('Textvorlage löschen'));
+            PageLayout::addStylesheet($this->getPluginUrl() . '/assets/stylesheets/' . $css);
+            $layout = $GLOBALS['template_factory']->open('layouts/base');
+            $template = $this->factory->open('delete_template');
+            $template->set_attribute('plugin', $this);
+            if (Request::option('tpl')) {
+                $tpl = UnizensusTextTemplate::find(Request::option('tpl'));
+                $template->set_attribute('tpl', $tpl);
+            }
+            $layout->content_for_layout = $template->render();
+            echo $layout->render();
+        }
     }
 
     function getInstitute($seminare_condition){

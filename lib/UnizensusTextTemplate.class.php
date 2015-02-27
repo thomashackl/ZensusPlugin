@@ -17,10 +17,9 @@
 class UnizensusTextTemplate extends SimpleORMap
 {
 
-    function __construct($id = null)
-    {
-        $this->db_table = 'unizensus_text_templates';
-        parent::__construct($id);
+    public static function configure($config = array()) {
+        $config['db_table'] = 'unizensus_text_templates';
+        parent::configure($config);
     }
 
     public function getAll() {

@@ -34,7 +34,7 @@
         <?php } ?>
         <?= CSRFProtection::tokenTag(); ?>
         <?= Button::createAccept(_('Vorlage speichern'), 'save_template') ?>
-        <?= Button::createCancel(_('Abbrechen'), 'cancel', array('rel' => 'close_dialog')) ?>
+        <?= Button::createCancel(_('Abbrechen'), 'cancel') ?>
     </div>
 </form>
 <script type="text/javascript">
