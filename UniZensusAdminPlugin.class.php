@@ -33,6 +33,10 @@ require_once "UniZensusPlugin.class.php";
 require_once 'zensus_xml_func.php';   // XML-Funktionen
 require_once 'lib/UnizensusTextTemplate.class.php';
 
+if (!function_exists('get_route')) {
+    include 'get_route.php';
+}
+
 class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
     private $user_is_eval_admin;
@@ -45,7 +49,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         if ($this->hasPermission()) {
             $navigation = new Navigation($this->getDisplayname(), PluginEngine::getLink($this, array(), 'show'));
-            if (basename($_SERVER['PHP_SELF']) == 'plugins.php') {
+            if (strpos(get_route(),'unizensusadminplugin') !== false) {
 
                 //Navigation::addItem('/UniZensusAdmin/show', clone $navigation);
                 $token_navigation = new Navigation(_("Export Token"), PluginEngine::getLink($this, array(), 'token'));
