@@ -109,7 +109,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
         if (!$GLOBALS['perm']->have_studip_perm('dozent', $this->getId())){
             if($this->course_status['questionnaire'] == true) return _("Den Fragebogen aufrufen und an der Evaluation teilnehmen"); if($this->course_status['status'] == 'run') return _("Sie haben an dieser Evaluation bereits teilgenommen!");
         }
-        return Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME . ': ' .$this->getCourseStatusMessage() . ($has_changed ? ' (' . _("geï¿½ndert"). ')' : '');
+        return Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME . ': ' .$this->getCourseStatusMessage() . ($has_changed ? ' (' . _("geändert"). ')' : '');
     }
 
     function isVisible() {
@@ -160,9 +160,9 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                 case 'run':
                     if (isset($this->course_status['time_frame']) &&
                     ($this->course_status['time_frame']['begin'] > time() || $this->course_status['time_frame']['end'] < time())){
-                        return _("Auï¿½erhalb des Evaluierungszeitraums.");
+                        return _("Außerhalb des Evaluierungszeitraums.");
                     } else {
-                        return _("Die Evaluation lï¿½uft.");
+                        return _("Die Evaluation läuft.");
                     }
                 break;
                 case 'analyze':
@@ -312,7 +312,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             echo '<input name="eval_public_stud" id="eval_public_stud" type="checkbox" value="1" '.(self::getDatafieldValue(self::$datafield_id_auswertung_studierende, $this->getID(), $GLOBALS['user']->id) ? 'checked' : '').' >';
             echo '</td><td>';
             echo '<div style="font-style:italic; padding-left: 10px;">';
-            echo sprintf(_("Mit der <b>ï¿½bermittlung</b> der Auswertung der Ergebnisse inklusive der Freitextantworten <b>an die Studierenden</b> dieser Lehrveranstaltung bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Grï¿½nden mit Wirkung fï¿½r die Zukunft widerrufen kann.")
+            echo sprintf(_("Mit der <b>?bermittlung</b> der Auswertung der Ergebnisse inklusive der Freitextantworten <b>an die Studierenden</b> dieser Lehrveranstaltung bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Gr?nden mit Wirkung f?r die Zukunft widerrufen kann.")
             , htmlready(Seminar::getInstance($this->getId())->getName()) );
             echo '</div>';
             echo '</td></tr>';
@@ -345,7 +345,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             echo '2.&nbsp;<input style="vertical-align:bottom" name="eval_public" id="eval_public" type="radio" value="1" '.(self::getDatafieldValue(self::$datafield_id_auswertung_oeffentlich, $this->getID(), $GLOBALS['user']->id) == 1 ? 'checked' : '').' >';
             echo '</td><td>';
             echo '<div style="font-style:italic; padding-left: 10px;">';
-            echo sprintf(_("Mit der <b>ï¿½bermittlung</b> der Auswertung der Ergebnisse der studentischen Lehrveranstaltungsevaluation aus der Lehrveranstaltung (%s) <b>an die Studiendekanin bzw. den Studiendekan</b> bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Grï¿½nden mit Wirkung fï¿½r die Zukunft widerrufen kann.")
+            echo sprintf(_("Mit der <b>?bermittlung</b> der Auswertung der Ergebnisse der studentischen Lehrveranstaltungsevaluation aus der Lehrveranstaltung (%s) <b>an die Studiendekanin bzw. den Studiendekan</b> bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Gr?nden mit Wirkung f?r die Zukunft widerrufen kann.")
             , htmlready(Seminar::getInstance($this->getId())->getName()) );
             echo '</div>';
             echo '</td></tr>';
@@ -355,7 +355,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             echo '3.&nbsp;<input style="vertical-align:bottom" name="eval_public" id="eval_public" type="radio" value="2" '.(self::getDatafieldValue(self::$datafield_id_auswertung_oeffentlich, $this->getID(), $GLOBALS['user']->id) == 2 ? 'checked' : '').' >';
             echo '</td><td>';
             echo '<div style="font-style:italic; padding-left: 10px;">';
-            echo sprintf(_("Mit der <b>ï¿½bermittlung</b> der Auswertung der Ergebnisse der studentischen Lehrveranstaltungsevaluation aus der Lehrveranstaltung (%s) <b>an die Studiendekanin bzw. den Studiendekan und die Evaluationsbeauftragte bzw. den Evaluationsbeauftragten</b> bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Grï¿½nden mit Wirkung fï¿½r die Zukunft widerrufen kann.")
+            echo sprintf(_("Mit der <b>?bermittlung</b> der Auswertung der Ergebnisse der studentischen Lehrveranstaltungsevaluation aus der Lehrveranstaltung (%s) <b>an die Studiendekanin bzw. den Studiendekan und die Evaluationsbeauftragte bzw. den Evaluationsbeauftragten</b> bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Gr?nden mit Wirkung f?r die Zukunft widerrufen kann.")
             , htmlready(Seminar::getInstance($this->getId())->getName()) );
             echo '</div>';
             echo '</td></tr>';
@@ -378,7 +378,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             echo '<input name="eval_stored" id="eval_stored" type="checkbox" value="1" '.(self::getDatafieldValue(self::$datafield_id_auswertung_speichern, $this->getID(), $GLOBALS['user']->id) ? 'checked' : '').' >';
             echo '</td><td>';
             echo '<div style="font-style:italic; padding-left: 10px;">';
-            echo sprintf(_("Mit der dauerhaften Speicherung der Auswertung der Ergebnisse der studentischen Lehrveranstaltungsevaluation aus der Lehrveranstaltung (%s) bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Grï¿½nden mit Wirkung fï¿½r die Zukunft widerrufen kann.")
+            echo sprintf(_("Mit der dauerhaften Speicherung der Auswertung der Ergebnisse der studentischen Lehrveranstaltungsevaluation aus der Lehrveranstaltung (%s) bin ich einverstanden. Mir ist bekannt, dass ich meine Einwilligung jederzeit ohne Angabe von Gr?nden mit Wirkung f?r die Zukunft widerrufen kann.")
             , htmlready(Seminar::getInstance($this->getId())->getName()) );
             echo '</div>';
             echo '</td></tr>';
@@ -404,7 +404,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             $weiterleitung[1] = _("Ergebnisweiterleitung an Studiendekanin/Studiendekan");
             $weiterleitung[2] = _("Ergebnisweiterleitung an Studiendekanin/Studiendekan und Evaluationsbeauftragte/n");
 
-            echo chr(10) . '<p>' . _("An Zensus ï¿½bermittelte Einstellungen:");
+            echo chr(10) . '<p>' . _("An Zensus ?bermittelte Einstellungen:");
             echo chr(10) . '<ul>';
             echo chr(10) . '<li>' . _("Konkrete Teilnehmerzahl") . ': ';
             echo (int)$additional_data['eval_participants'];
@@ -427,18 +427,18 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             echo chr(10) . '<p>';
             echo chr(10) . $this->getCourseStatusMessage();
             if ($GLOBALS['perm']->have_studip_perm('dozent', $this->getId()) && $this->course_status['numvotes'] != -1) {
-                echo '<br>' . _("Anzahl der Bewertungen fï¿½r diese Veranstaltung: ") . $this->course_status['numvotes'];
+                echo '<br>' . _("Anzahl der Bewertungen f?r diese Veranstaltung: ") . $this->course_status['numvotes'];
             }
             echo chr(10) . '</p>';
             if ($this->course_status['preview'] || $this->course_status['pdfquestionnaire'] || $this->course_status['questionnaire'] || $this->course_status['noresultsreason'] || $results_available){
-                echo chr(10) . '<div style="font-weight:bold;font-size:10pt;border: 1px solid;padding:5px">' . _("Mï¿½gliche Aktionen:") . '<div style="font-size:10pt;margin-left:10px">';
+                echo chr(10) . '<div style="font-weight:bold;font-size:10pt;border: 1px solid;padding:5px">' . _("Mögliche Aktionen:") . '<div style="font-size:10pt;margin-left:10px">';
                 if ($this->course_status['preview']) {
                     echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('preview',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
                     echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Eine Voransicht des Fragebogens aufrufen") . '</a></p>';
                 }
                 if ($this->course_status['pdfquestionnaire'] && $GLOBALS['perm']->have_studip_perm('dozent', $this->getId()) ) {
                     echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfquestionnaire',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                    echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Papierfragebogen fï¿½r manuelle Erhebung als PDF aufrufen") . '</a></p>';
+                    echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Papierfragebogen für manuelle Erhebung als PDF aufrufen") . '</a></p>';
                 }
 
                 if ($results_available
@@ -467,7 +467,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                         echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('results',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
                         echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Die Ergebnisse der Evaluation aufrufen") . '</a></p>';
                     }
-                    //hier kï¿½nnte evtl. pdfdetail benutzt werden, im Moment nur fï¿½r OL relevant
+                    //hier k?nnte evtl. pdfdetail benutzt werden, im Moment nur f?r OL relevant
                     if ($this->checkResultforUser('pdfresults', $user_id)) {
                         echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfresults',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
                         echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Profillinie) der Evaluation als PDF aufrufen") . '</a></p>';
@@ -477,17 +477,17 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                 if (!$results_available && $this->course_status['noresultsreason'] && $GLOBALS['perm']->have_studip_perm('autor', $this->getId())) {
                     if($this->course_status['noresultsreason'] == 'wrong phase') {
                         echo chr(10) . '<p>';
-                        echo _("Die Auswertung liegt noch nicht vor, da die Evaluation noch lï¿½uft.");
+                        echo _("Die Auswertung liegt noch nicht vor, da die Evaluation noch l?uft.");
                         echo chr(10) . '</p>';
                     }
                     if($this->course_status['noresultsreason'] == 'not public') {
                         echo chr(10) . '<p>';
-                        echo _("Die Evaluation ist beendet, aber das Ergebnis ist nicht ï¿½ffentlich.");
+                        echo _("Die Evaluation ist beendet, aber das Ergebnis ist nicht ?ffentlich.");
                         echo chr(10) . '</p>';
                     }
                     if($this->course_status['noresultsreason'] == 'too few answers') {
                         echo chr(10) . '<p>';
-                        echo _("Die Evaluation ist beendet, aber die Auswertung liegt nicht vor, bzw. die notwendige Rï¿½cklaufquote wurde leider nicht erreicht.");
+                        echo _("Die Evaluation ist beendet, aber die Auswertung liegt nicht vor, bzw. die notwendige Rücklaufquote wurde leider nicht erreicht.");
                         echo chr(10) . '</p>';
                     }
                 }
@@ -522,10 +522,10 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                             echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('questionnaire',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
                             echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Den Fragebogen aufrufen und an der Evaluation teilnehmen") . '</a></p>';
                         } else {
-                            echo chr(10) .'<p>'. _("Fï¿½r diese Evaluation ist ein Papierfragebogen vorgesehen. Weitere Informationen bekommen Sie von den Lehrenden der Veranstaltung.") . '</p>';
+                            echo chr(10) .'<p>'. _("F?r diese Evaluation ist ein Papierfragebogen vorgesehen. Weitere Informationen bekommen Sie von den Lehrenden der Veranstaltung.") . '</p>';
                         }
                     } else {
-                        echo chr(10) . '<p>'._("Als Dozent der Veranstaltung kï¿½nnen sie nicht an der Evaluation teilnehmen!") . '</p>';
+                        echo chr(10) . '<p>'._("Als Dozent der Veranstaltung können sie nicht an der Evaluation teilnehmen!") . '</p>';
                     }
                 } elseif ($this->course_status['status'] == 'run' && !$GLOBALS['perm']->have_studip_perm('dozent' , $this->getId())){
                     echo chr(10) .'<p>'. _("Sie haben an dieser Evaluation bereits teilgenommen!") . '</p>';
@@ -535,7 +535,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                 echo '</div>';
             }
         } else {
-            echo chr(10) . '<p style="font-weight:bold">' . _("Zu dieser Veranstaltung ist keine Evaluation verfï¿½gbar.") . '</p>';
+            echo chr(10) . '<p style="font-weight:bold">' . _("Zu dieser Veranstaltung ist keine Evaluation verfügbar.") . '</p>';
         }
         if ($GLOBALS['perm']->have_perm('root')) {
             $ex_tstamp = date('Y-m-d-H-i');
