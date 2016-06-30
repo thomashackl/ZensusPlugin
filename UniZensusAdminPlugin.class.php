@@ -632,15 +632,13 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $ret = array();
         list($institut_id, $all) = explode('_', $_SESSION['zensus_admin']['institut_id']);
         if ($institut_id == "all"  && $perm->have_perm("root")) {
-            $query = "SELECT Name,Seminar_id as seminar_id, VeranstaltungsNummer, visible FROM seminare WHERE 1 $seminare_condition";
+            $query = "SELECT DISTINCT Name,Seminar_id as seminar_id, VeranstaltungsNummer, visible FROM seminare WHERE 1 $seminare_condition";
         } elseif ($all == 'all') {
-            $query = "SELECT seminare.Name,seminare.Seminar_id as seminar_id, seminare.VeranstaltungsNummer, seminare.visible FROM seminare LEFT JOIN seminar_inst USING (Institut_id)
-        INNER JOIN Institute ON seminar_inst.institut_id = Institute.Institut_id WHERE Institute.fakultaets_id  = '{$institut_id}' $seminare_condition
-        GROUP BY seminare.Seminar_id";
+            $query = "SELECT DISTINCT seminare.Name,seminare.Seminar_id as seminar_id, seminare.VeranstaltungsNummer, seminare.visible FROM seminare LEFT JOIN seminar_inst USING (Institut_id)
+        INNER JOIN Institute ON seminar_inst.institut_id = Institute.Institut_id WHERE Institute.fakultaets_id  = '{$institut_id}' $seminare_condition";
         } else {
-        $query = "SELECT seminare.Name,seminare.Seminar_id as seminar_id, seminare.VeranstaltungsNummer, seminare.visible FROM seminare LEFT JOIN seminar_inst USING (Institut_id)
-        WHERE seminar_inst.institut_id = '{$institut_id}' $seminare_condition
-        GROUP BY seminare.Seminar_id";
+        $query = "SELECT DISTINCT seminare.Name,seminare.Seminar_id as seminar_id, seminare.VeranstaltungsNummer, seminare.visible FROM seminare LEFT JOIN seminar_inst USING (Institut_id)
+        WHERE seminar_inst.institut_id = '{$institut_id}' $seminare_condition";
         }
         if (Config::get()->IMPORTANT_SEMNUMBER) {
             $query .= " ORDER BY VeranstaltungsNummer, Name";
