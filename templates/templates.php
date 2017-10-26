@@ -1,6 +1,6 @@
 <?= $saved ?: ''?>
 <table class="default" width="100%">
-    <caption><?= _('Textvorlagen für Nachrichten und Ankündigungen') ?></caption>
+    <caption><?= _('Textvorlagen fÃ¼r Nachrichten und AnkÃ¼ndigungen') ?></caption>
     <thead>
         <tr>
             <th width="20%"><?= _('Name') ?></th>
@@ -17,10 +17,10 @@
             <td valign="top"><?= nl2br(htmlReady($t['message'])) ?></td>
             <td valign="top">
                 <a href="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'edit_template').'" title="'._('Vorlage bearbeiten') ?>">
-                    <?= Assets::img('icons/16/blue/edit.png') ?>
+                    <?= Icon::create('edit', 'clickable') ?>
                 </a>
-                <a href="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'delete_template').'" title="'._('Vorlage löschen') ?>">
-                    <?= Assets::img('icons/16/blue/trash.png') ?>
+                <a href="<?= PluginEngine::getLink($plugin, array('tpl' => $t['template_id']), 'delete_template').'" title="'._('Vorlage lÃ¶schen') ?>">
+                    <?= Icon::create('trash', 'clickable') ?>
                 </a>
             </td>
         <tr>

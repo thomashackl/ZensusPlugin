@@ -39,7 +39,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             $has_changed = $this->hasChanged($last_visit);
             $message = $this->getOverviewMessage($has_changed);
             $nav = new Navigation(Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME, PluginEngine::getUrl($this),array(),'show');
-            $nav->setImage($has_changed ? 'icons/20/red/evaluation' : 'icons/20/black/evaluation', array('title' => $message));
+            $nav->setImage(Icon::create('evaluation', $has_changed ? 'new' : 'clickable' , array('title' => $message)));
             return $nav;
         }
     }
@@ -49,8 +49,6 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
         $this->setId($course_id);
         if ($this->isVisible()) {
             $tab = new Navigation(Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME, PluginEngine::getUrl($this),array(),'show');
-            $tab->setActiveImage(Assets::image_path('icons/16/black/evaluation'));
-            $tab->setImage(Assets::image_path('icons/16/white/evaluation'));
             return array(get_class($this) => $tab);
         }
     }
@@ -109,7 +107,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
         if (!$GLOBALS['perm']->have_studip_perm('dozent', $this->getId())){
             if($this->course_status['questionnaire'] == true) return _("Den Fragebogen aufrufen und an der Evaluation teilnehmen"); if($this->course_status['status'] == 'run') return _("Sie haben an dieser Evaluation bereits teilgenommen!");
         }
-        return Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME . ': ' .$this->getCourseStatusMessage() . ($has_changed ? ' (' . _("geändert"). ')' : '');
+        return Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME . ': ' .$this->getCourseStatusMessage() . ($has_changed ? ' (' . _("geÃ¤ndert"). ')' : '');
     }
 
     function isVisible() {
@@ -160,9 +158,9 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                 case 'run':
                     if (isset($this->course_status['time_frame']) &&
                     ($this->course_status['time_frame']['begin'] > time() || $this->course_status['time_frame']['end'] < time())){
-                        return _("Außerhalb des Evaluierungszeitraums.");
+                        return _("AuÃŸerhalb des Evaluierungszeitraums.");
                     } else {
-                        return _("Die Evaluation läuft.");
+                        return _("Die Evaluation lÃ¤uft.");
                     }
                 break;
                 case 'analyze':
@@ -431,14 +429,14 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             }
             echo chr(10) . '</p>';
             if ($this->course_status['preview'] || $this->course_status['pdfquestionnaire'] || $this->course_status['questionnaire'] || $this->course_status['noresultsreason'] || $results_available){
-                echo chr(10) . '<div style="font-weight:bold;font-size:10pt;border: 1px solid;padding:5px">' . _("Mögliche Aktionen:") . '<div style="font-size:10pt;margin-left:10px">';
+                echo chr(10) . '<div style="font-weight:bold;font-size:10pt;border: 1px solid;padding:5px">' . _("MÃ¶gliche Aktionen:") . '<div style="font-size:10pt;margin-left:10px">';
                 if ($this->course_status['preview']) {
                     echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('preview',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
                     echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Eine Voransicht des Fragebogens aufrufen") . '</a></p>';
                 }
                 if ($this->course_status['pdfquestionnaire'] && $GLOBALS['perm']->have_studip_perm('dozent', $this->getId()) ) {
                     echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfquestionnaire',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                    echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Papierfragebogen für manuelle Erhebung als PDF aufrufen") . '</a></p>';
+                    echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Papierfragebogen fÃ¼r manuelle Erhebung als PDF aufrufen") . '</a></p>';
                 }
 
                 if ($results_available
@@ -482,12 +480,12 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                     }
                     if($this->course_status['noresultsreason'] == 'not public' && $this->course_status['status'] == 'finished') {
                         echo chr(10) . '<p>';
-                        echo _("Die Auswertung ist nicht öffentlich.");
+                        echo _("Die Auswertung ist nicht Ã¶ffentlich.");
                         echo chr(10) . '</p>';
                     }
                     if($this->course_status['noresultsreason'] == 'too few answers' && $this->course_status['status'] == 'finished') {
                         echo chr(10) . '<p>';
-                        echo _("Die Auswertung liegt nicht vor, weil die notwendige Rücklaufquote nicht erreicht wurde.");
+                        echo _("Die Auswertung liegt nicht vor, weil die notwendige RÃ¼cklaufquote nicht erreicht wurde.");
                         echo chr(10) . '</p>';
                     }
                 }
@@ -522,10 +520,10 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                             echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('questionnaire',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
                             echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Den Fragebogen aufrufen und an der Evaluation teilnehmen") . '</a></p>';
                         } else {
-                            echo chr(10) .'<p>'. _("F?r diese Evaluation ist ein Papierfragebogen vorgesehen. Weitere Informationen bekommen Sie von den Lehrenden der Veranstaltung.") . '</p>';
+                            echo chr(10) .'<p>'. _("FÃ¼r diese Evaluation ist ein Papierfragebogen vorgesehen. Weitere Informationen bekommen Sie von den Lehrenden der Veranstaltung.") . '</p>';
                         }
                     } else {
-                        echo chr(10) . '<p>'._("Als Dozent der Veranstaltung können sie nicht an der Evaluation teilnehmen!") . '</p>';
+                        echo chr(10) . '<p>'._("Als Dozent der Veranstaltung kÃ¶nnen sie nicht an der Evaluation teilnehmen!") . '</p>';
                     }
                 } elseif ($this->course_status['status'] == 'run' && !$GLOBALS['perm']->have_studip_perm('dozent' , $this->getId())){
                     echo chr(10) .'<p>'. _("Sie haben an dieser Evaluation bereits teilgenommen!") . '</p>';
@@ -535,7 +533,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                 echo '</div>';
             }
         } else {
-            echo chr(10) . '<p style="font-weight:bold">' . _("Zu dieser Veranstaltung ist keine Evaluation verfügbar.") . '</p>';
+            echo chr(10) . '<p style="font-weight:bold">' . _("Zu dieser Veranstaltung ist keine Evaluation verfÃ¼gbar.") . '</p>';
         }
         if ($GLOBALS['perm']->have_perm('root')) {
             $ex_tstamp = date('Y-m-d-H-i');
@@ -583,4 +581,4 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
         }
     }
 }
-?>
+

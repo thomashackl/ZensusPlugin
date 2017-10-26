@@ -5,14 +5,14 @@
 *
 *
 *
-* @author        André Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
+* @author        AndrÃ© Noack <noack@data-quest.de>, Suchi & Berg GmbH <info@data-quest.de>
 * @version        $Id: UniZensusAdminPlugin.class.php,v 1.6 2013/04/04 15:17:49 anoack Exp $
 */
 // +---------------------------------------------------------------------------+
 // This file is part of Stud.IP
 // UniZensusAdminPlugin.class.php
 //
-// Copyright (C) 2007 André Noack <noack@data-quest.de>
+// Copyright (C) 2007 AndrÃ© Noack <noack@data-quest.de>
 // Suchi & Berg GmbH <info@data-quest.de>
 // +---------------------------------------------------------------------------+
 // This program is free software; you can redistribute it and/or
@@ -82,7 +82,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
     function token_action()
     {
         if (!$this->hasPermission()) {
-            throw new AccessDeniedException("Nur Root und ausgewählte Admins dürfen dieses Plugin sehen.");
+            throw new AccessDeniedException("Nur Root und ausgewÃ¤hlte Admins dÃ¼rfen dieses Plugin sehen.");
         }
         Navigation::activateItem('/UniZensusAdmin/sub/token');
         if (Request::submitted('generate_token')) {
@@ -90,8 +90,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         }
         ob_start();
         echo '<p>';
-        echo _("Für den Import der Veranstaltungsdaten in das Zensus System müssen sie dort ein Authentifizierungstoken hinterlegen.");
-        echo '<br>' . _("Hier können Sie ein Token für Ihre aktuelle Nutzerkennung generieren.");
+        echo _("FÃ¼r den Import der Veranstaltungsdaten in das Zensus System mÃ¼ssen sie dort ein Authentifizierungstoken hinterlegen.");
+        echo '<br>' . _("Hier kÃ¶nnen Sie ein Token fÃ¼r Ihre aktuelle Nutzerkennung generieren.");
         echo '</p>';
         echo '<div>';
         echo '<span style="font-weight:bold; padding-right:10px;">' . _("Nutzerkennung:") . '</span>';
@@ -107,7 +107,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         echo '</form>';
         echo '</div>';
         PageLayout::setTitle($this->getDisplayname());
-        $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+        $layout = $GLOBALS['template_factory']->open('layouts/base');
         $layout->content_for_layout = ob_get_clean();
         echo $layout->render();
     }
@@ -115,7 +115,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
     function show_action() {
 
         if (!$this->hasPermission()) {
-            throw new AccessDeniedException("Nur Root und ausgewählte Admins dürfen dieses Plugin sehen.");
+            throw new AccessDeniedException("Nur Root und ausgewÃ¤hlte Admins dÃ¼rfen dieses Plugin sehen.");
         }
         Navigation::activateItem('/UniZensusAdmin/sub/show');
         ob_start();
@@ -145,11 +145,11 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         }
         $form_fields['text_template']['options'] = $options;
         $form_fields['omit_participated'] = array('type' => 'checkbox');
-        $form_buttons['create_news'] = array('name' => 'uebernehmen', 'caption' => _("Ankündigung erstellen"));
+        $form_buttons['create_news'] = array('name' => 'uebernehmen', 'caption' => _("AnkÃ¼ndigung erstellen"));
         $form_buttons['send_message'] = array('name' => 'uebernehmen', 'caption' => _("Nachricht senden"));
         $form_buttons['set_plugin_status'] = array('name' => 'uebernehmen', 'caption' => _("Plugin ein/ausschalten"));
-        $form_buttons['set_starttime'] = array('name' => 'uebernehmen', 'caption' => _("Startzeit übernehmen"));
-        $form_buttons['set_endtime'] = array('name' => 'uebernehmen', 'caption' => _("Endzeit übernehmen"));
+        $form_buttons['set_starttime'] = array('name' => 'uebernehmen', 'caption' => _("Startzeit Ã¼bernehmen"));
+        $form_buttons['set_endtime'] = array('name' => 'uebernehmen', 'caption' => _("Endzeit Ã¼bernehmen"));
         $form = new StudipForm($form_fields, $form_buttons, 'studipform', false);
 
         if($form->isClicked('set_starttime') || $form->isClicked('set_endtime')){
@@ -270,14 +270,14 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             ?>
             </select>&nbsp;
             <?=SemesterData::GetSemesterSelector(array('name'=>'select_sem', 'style'=>'vertical-align:middle;'), $_SESSION['_default_sem'], 'semester_id', false)?>
-            <?=Studip\Button::create(_('Auswählen'), "choose_institut")?>
+            <?=Studip\Button::create(_('AuswÃ¤hlen'), "choose_institut")?>
             <br>
             <span style="font-size:80%;">
-            ausgewählte ID: <span style="background-color:yellow;"><?=$institut_id?></span>
+            ausgewÃ¤hlte ID: <span style="background-color:yellow;"><?=$institut_id?></span>
             </span>
             </div>
             <div style="font-size:10pt;margin:10px;">
-            <b><?=_("Angezeigte Veranstaltungen einschränken:")?></b>
+            <b><?=_("Angezeigte Veranstaltungen einschrÃ¤nken:")?></b>
             <span style="margin-left:10px;font-size:10pt;">
             <input type="text" id="filter_name" name="filter_name" value="<?=htmlReady($_SESSION['zensus_admin']['filter_name'])?>" style="vertical-align:middle;">
             &nbsp;<label for="filter_name"><?=_("Name/Nummer der Veranstaltung")?></label>
@@ -311,7 +311,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 }
                 echo chr(10).$form->getFormStart(PluginEngine::getLink($this));
                 echo chr(10).'<div style="margin:10px;font-size:10pt;font-weight:bold">';
-                echo _("Start- und Endzeiten für ausgewählte Veranstaltungen setzen:");
+                echo _("Start- und Endzeiten fÃ¼r ausgewÃ¤hlte Veranstaltungen setzen:");
                 echo chr(10). '</div>';
                 echo chr(10).'<div style="margin:10px;font-size:10pt;">';
                 echo  '<span>' . _("Startzeit:") . '</span>';
@@ -324,15 +324,15 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo '</span><span style="padding-left:10px;">'. $form->getFormButton('set_endtime', array('style' => 'vertical-align:middle'));
                 echo chr(10). '</span></div>';
                 echo chr(10).'<div style="margin:10px;font-size:10pt;font-weight:bold">';
-                echo _("Evaluationsplugin für ausgewählte Veranstaltungen ein/ausschalten:") .'</div>';
+                echo _("Evaluationsplugin fÃ¼r ausgewÃ¤hlte Veranstaltungen ein/ausschalten:") .'</div>';
                 echo chr(10).'<div style="margin:10px;font-size:10pt;">';
                 echo chr(10) . $form->getFormField('plugin_status');
                 echo '&nbsp;&nbsp;&nbsp;'. $form->getFormButton('set_plugin_status', array('style' => 'vertical-align:middle'));
                 echo chr(10). '</div>';
                 echo chr(10).'<div style="margin:10px;font-size:10pt;font-weight:bold">';
-                echo _("Nachrichten/Ankündigungen für gewählte Veranstaltungen erstellen:") .'</div>';
+                echo _("Nachrichten/AnkÃ¼ndigungen fÃ¼r gewÃ¤hlte Veranstaltungen erstellen:") .'</div>';
                 echo chr(10).'<div style="margin:10px;font-size:10pt;">';
-                echo chr(10) . '<label for="studipform_text_template">'._('Textvorlage auswählen:').'</label>';
+                echo chr(10) . '<label for="studipform_text_template">'._('Textvorlage auswÃ¤hlen:').'</label>';
                 echo chr(10) . $form->getFormField('text_template');
                 echo chr(10) . $form->getFormField('omit_participated');
                 echo chr(10) . '<label for="studipform_omit_participated">'._('Nur an Personen, die noch nicht teilgenommen haben').'</label>';
@@ -466,7 +466,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             echo "</table>";
             echo $form->getFormEnd();
             if ($_SESSION['zensus_admin']['institut_id'] && !count($data)) {
-                echo MessageBox::info(_("Im gewählten Bereich existieren keine Veranstaltungen"));
+                echo MessageBox::info(_("Im gewÃ¤hlten Bereich existieren keine Veranstaltungen"));
             }
         } else {
             echo MessageBox::info(_("Sie wurden noch keinen Einrichtungen zugeordnet."));
@@ -474,7 +474,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         PageLayout::setTitle($this->getDisplayname());
 
-        $layout = $GLOBALS['template_factory']->open('layouts/base_without_infobox');
+        $layout = $GLOBALS['template_factory']->open('layouts/base');
 
         $layout->content_for_layout = ob_get_clean();
 
@@ -517,13 +517,13 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         $sidebar = Sidebar::get();
         $actions = new ActionsWidget();
         $actions->addLink(_('Neue Textvorlage anlegen'), PluginEngine::getLink($this, array(), 'edit_template'),
-            'icons/16/blue/add.png');
+            Icon::create('add', 'clickable'));
         $sidebar->addWidget($actions);
         $layout->set_attribute('sidebar', $sidebar);
         Helpbar::get()->addPlainText('',
             _('Im Vorlagentext verwendete [nop]###Marker###[/nop] werden '.
-                'später automatisch beim Nachrichtenversand oder beim '.
-                'Erstellen der Ankündigung durch die konkreten Werte ersetzt. '.
+                'spÃ¤ter automatisch beim Nachrichtenversand oder beim '.
+                'Erstellen der AnkÃ¼ndigung durch die konkreten Werte ersetzt. '.
                 'Welche Marker es genau gibt, sehen Sie beim Bearbeiten oder '.
                 'Erstellen einer Textvorlage.'));
         echo $layout->render();
@@ -569,7 +569,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             header('Location: '.URLHelper::getLink('plugins.php/unizensusadminplugin/templates'));
         } else {
             Navigation::activateItem('/UniZensusAdmin/sub/templates');
-            PageLayout::setTitle($this->getDisplayname() . ' - ' . _('Textvorlage löschen'));
+            PageLayout::setTitle($this->getDisplayname() . ' - ' . _('Textvorlage lÃ¶schen'));
             PageLayout::addStylesheet($this->getPluginUrl() . '/assets/stylesheets/' . $css);
             $layout = $GLOBALS['template_factory']->open('layouts/base');
             $template = $this->factory->open('delete_template');
@@ -839,7 +839,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 // Show summary for all successfully processed courses.
                 if ($sent) {
                     if (file_exists($GLOBALS['PLUGINS_PATH'].'/intelec/GarudaPlugin/models/GarudaModel.php')) {
-                        echo MessageBox::success(sprintf(_('Die Nachricht an %s Personen in %s Veranstaltungen wurde an das System zum Versand übergeben.'), $recipients, sizeof($sent)));
+                        echo MessageBox::success(sprintf(_('Die Nachricht an %s Personen in %s Veranstaltungen wurde an das System zum Versand Ã¼bergeben.'), $recipients, sizeof($sent)));
                     } else {
                         echo MessageBox::success(sprintf(_('Die Nachricht an %s Personen in %s Veranstaltungen wurde verschickt.'), $recipients, sizeof($sent)));
                     }
@@ -851,11 +851,11 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 }
             // No courses selected, so whom to send to?
             } else {
-                echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
+                echo MessageBox::error(_('Bitte wÃ¤hlen Sie mindestens eine Veranstaltung aus.'));
             }
         // No template selected, so what to send?
         } else {
-            echo MessageBox::error(_('Bitte wählen Sie eine Textvorlage aus. Evtl. müssen Sie erst eine neue Vorlage anlegen.'));
+            echo MessageBox::error(_('Bitte wÃ¤hlen Sie eine Textvorlage aus. Evtl. mÃ¼ssen Sie erst eine neue Vorlage anlegen.'));
         }
     }
 
@@ -897,20 +897,20 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 }
                 // Show summary for all successfully processed courses.
                 if ($created) {
-                    echo MessageBox::success(sprintf(_('Die Ankündigung wurde in %s Veranstaltungen eingestellt.'), sizeof($created)));
+                    echo MessageBox::success(sprintf(_('Die AnkÃ¼ndigung wurde in %s Veranstaltungen eingestellt.'), sizeof($created)));
                 }
                 // Show summary for all failures. Here we need details - which courses have failed?
                 if ($failed) {
-                    echo MessageBox::success(_('Die Ankündigung konnte in folgenden Veranstaltungen nicht erstellt werden:'),
+                    echo MessageBox::success(_('Die AnkÃ¼ndigung konnte in folgenden Veranstaltungen nicht erstellt werden:'),
                         array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
                 }
             // No courses selected, so whom to send to?
             } else {
-                echo MessageBox::error(_('Bitte wählen Sie mindestens eine Veranstaltung aus.'));
+                echo MessageBox::error(_('Bitte wÃ¤hlen Sie mindestens eine Veranstaltung aus.'));
             }
         // No template selected, so what to send?
         } else {
-            echo MessageBox::error(_('Bitte wählen Sie eine Textvorlage aus. Evtl. müssen Sie erst eine neue Vorlage anlegen.'));
+            echo MessageBox::error(_('Bitte wÃ¤hlen Sie eine Textvorlage aus. Evtl. mÃ¼ssen Sie erst eine neue Vorlage anlegen.'));
         }
     }
 

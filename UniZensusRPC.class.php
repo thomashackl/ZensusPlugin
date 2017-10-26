@@ -1,6 +1,5 @@
 <?php
 require_once "vendor/phpxmlrpc/xmlrpc.inc";
-require_once "lib/datei.inc.php";
 
 class UniZensusRPC {
 
@@ -71,24 +70,28 @@ class UniZensusRPC {
 	}
 
 	function putResultToCache($id, $result){
-		if ($this->cache){
-			$db = new DB_Seminar();
-			$data = addslashes(serialize($result));
-			$db->query("REPLACE INTO unizensusplugincache (id,data,chdate) VALUES ('$id', '$data', UNIX_TIMESTAMP())");
-			return $db->affected_rows();
+		if ($this->cache) {
+		    return DBManager::get()->execute(
+		        "REPLACE INTO unizensusplugincache (id,data,chdate) VALUES (:id, :data, UNIX_TIMESTAMP())",
+                ['id' => $id, 'data' => serialize($result)]);
 		}
 	}
 
 	function getResultFromCache($id, $override = false){
 		$result = null;
-		if ($this->cache){
-			$db = new DB_Seminar();
-			$db->query("SELECT data FROM unizensusplugincache WHERE id='$id'" . (!$override ? " AND chdate > " . (time() - $this->cache) : ""));
-			if ($db->next_record()){
-				$result = unserialize($db->f('data'));
-			}
+		if ($this->cache) {
+            $query = "SELECT data FROM unizensusplugincache WHERE id = :id";
+            $parameters = ['id' => $id];
+            if (!$override) {
+                $query .= " AND chdate > :time";
+                $parameters['time'] = time() - $this->cache;
+            }
+		    $entry = DBManager::get()->fetchOne($query, $parameters);
+            if ($entry) {
+                $result = unserialize($entry['data']);
+            }
 		}
 		return $result;
 	}
 }
-?>
+
