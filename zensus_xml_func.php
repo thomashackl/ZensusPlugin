@@ -166,7 +166,7 @@ function zensus_export_range($range_id, $ex_sem, $o_mode = 'direct', $auth_uid =
 
     zensus_output_data ( zensus_xmlheader(), $o_mode);
 
-    if ($auth_uid && get_global_perm($auth_uid) != 'root') {
+    if ($auth_uid && $GLOBALS['perm']->get_perm($auth_uid) != 'root') {
         if ($range_id == 'root') {
             $db->query("SELECT Institut_id, fakultaets_id FROM user_inst INNER JOIN Institute USING (Institut_id) WHERE inst_perms = 'admin' AND user_id = '" . $auth_uid . "' ORDER BY Institut_id=fakultaets_id");
             $faks = array();
