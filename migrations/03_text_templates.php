@@ -1,5 +1,5 @@
 <?php
-class TextTemplates extends DBMigration
+class TextTemplates extends Migration
 {
     function up(){
         DBManager::get()->exec("CREATE TABLE IF NOT EXISTS `unizensus_text_templates` (

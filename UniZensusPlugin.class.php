@@ -15,7 +15,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
     static function SQLDateToTimestamp($sqldate){
         $date_values = explode("-", $sqldate); //YYYY-MM-DD
         if (checkdate((int)$date_values[1],(int)$date_values[2],(int)$date_values[0])){
-            return mktime(0,0,0,$date_values[1],$date_values[2],$date_values[0], 0);
+            return mktime(0,0,0,$date_values[1],$date_values[2],$date_values[0]);
         } else {
             return false;
         }
@@ -259,7 +259,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
     function show_action()
     {
         if (!$this->isVisible()) return;
-        PageLayout::setTitle($_SESSION['SessSemName']['header_line'] . ' - ' . Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME);
+        PageLayout::setTitle(Context::get()->getHeaderLine() . ' - ' . Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME);
         Navigation::activateItem('/course/' . get_class($this));
         ob_start();
         $this->getCourseAndUserStatus();

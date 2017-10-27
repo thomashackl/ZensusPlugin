@@ -6,17 +6,17 @@ STUDIP.UnizensusPlugin = {
             var error = [];
             var nameInput = $('input[name="name"]');
             if (nameInput.val() == '') {
-                error.push('Bitte geben Sie einen Namen für die Vorlage an!');
+                error.push('Bitte geben Sie einen Namen fÃ¼r die Vorlage an!');
                 success = false;
             }
             var subjectInput = $('input[name="subject"]');
             if (subjectInput.val() == '') {
-                error.push('Bitte geben Sie einen Betreff für die Vorlage an!');
+                error.push('Bitte geben Sie einen Betreff fÃ¼r die Vorlage an!');
                 success = false;
             }
             var msgInput = $('textarea[name="message"]');
             if (msgInput.val() == '') {
-                error.push('Bitte geben Sie einen Nachrichtentext für die Vorlage an!');
+                error.push('Bitte geben Sie einen Nachrichtentext fÃ¼r die Vorlage an!');
                 success = false;
             }
             if (!success) {
@@ -30,3 +30,7 @@ STUDIP.UnizensusPlugin = {
     }
 
 }
+
+$(document).ready(function() {
+    $('#institut_id').select2();
+});

@@ -118,6 +118,14 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             throw new AccessDeniedException("Nur Root und ausgewählte Admins dürfen dieses Plugin sehen.");
         }
         Navigation::activateItem('/UniZensusAdmin/sub/show');
+        if (Studip\ENV == 'development') {
+            $js = 'unizensusplugin.js';
+            $css = 'unizensusplugin.css';
+        } else {
+            $js = 'unizensusplugin.min.js';
+            $css = 'unizensusplugin.min.css';
+        }
+        PageLayout::addScript($this->getPluginUrl().'/assets/javascript/'.$js);
         ob_start();
         $cols = array();
         $cols[] = array(1,'','');
@@ -247,7 +255,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             <?=_("Bitte w&auml;hlen Sie eine Einrichtung aus:")?>
             </div>
             <div style="margin-left:10px;">
-            <select name="institut_id" style="vertical-align:middle;">
+            <select name="institut_id" style="vertical-align:middle;" id="institut_id">
             <?
             reset($_my_inst);
             while (list($key,$value) = each($_my_inst)){
@@ -410,12 +418,12 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 }
                 $tmpname = md5(uniqid('tmp'));
                 if (array_to_csv($csvdata, $GLOBALS['TMP_PATH'] . '/' . $tmpname, $captions)) {
-                    header('Location: ' . GetDownloadLink($tmpname, 'Veranstaltungen_Lehrevaluation.csv', 4, 'force'));
+                    header('Location: ' . html_entity_decode(FileManager::getDownloadLinkForTemporaryFile($tmpname, 'Veranstaltungen_Lehrevaluation.csv')));
                     page_close();
                     die();
                 }
             }
-            $semlink = $GLOBALS['perm']->have_studip_perm('admin', $_SESSION['zensus_admin']['institut_id']) ? 'seminar_main.php?auswahl=' : 'details.php?sem_id=';
+            $semlink = $GLOBALS['perm']->have_studip_perm('admin', $_SESSION['zensus_admin']['institut_id']) ? 'seminar_main.php?auswahl=' : 'dispatch.php/details?sem_id=';
             foreach($data as $seminar_id => $semdata) {
                 $sem = new Seminar($seminar_id);
                 $dates = $sem->getDatesExport(array(
