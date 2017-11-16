@@ -259,7 +259,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
     function show_action()
     {
         if (!$this->isVisible()) return;
-        PageLayout::setTitle(Context::get()->getHeaderLine() . ' - ' . Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME);
+        PageLayout::setTitle(Context::getHeaderLine() . ' - ' . Config::get()->UNIZENSUSPLUGIN_DISPLAYNAME);
         Navigation::activateItem('/course/' . get_class($this));
         ob_start();
         $this->getCourseAndUserStatus();
@@ -425,7 +425,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
             echo chr(10) . '<p>';
             echo chr(10) . $this->getCourseStatusMessage();
             if ($GLOBALS['perm']->have_studip_perm('dozent', $this->getId()) && $this->course_status['numvotes'] != -1) {
-                echo '<br>' . _("Anzahl der Bewertungen f?r diese Veranstaltung: ") . $this->course_status['numvotes'];
+                echo '<br>' . _("Anzahl der Bewertungen für diese Veranstaltung: ") . $this->course_status['numvotes'];
             }
             echo chr(10) . '</p>';
             if ($this->course_status['preview'] || $this->course_status['pdfquestionnaire'] || $this->course_status['questionnaire'] || $this->course_status['noresultsreason'] || $results_available){
@@ -475,7 +475,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                 if (!$results_available && $this->course_status['noresultsreason'] && $GLOBALS['perm']->have_studip_perm('tutor', $this->getId())) {
                     if($this->course_status['noresultsreason'] == 'wrong phase') {
                         echo chr(10) . '<p>';
-                        echo _("Die Auswertung liegt noch nicht vor, da die Evaluation noch l?uft.");
+                        echo _("Die Auswertung liegt noch nicht vor, da die Evaluation noch läuft.");
                         echo chr(10) . '</p>';
                     }
                     if($this->course_status['noresultsreason'] == 'not public' && $this->course_status['status'] == 'finished') {
