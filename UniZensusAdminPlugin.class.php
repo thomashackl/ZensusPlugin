@@ -811,15 +811,21 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     // Get all members of the current course.
                     $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
                     if (Request::option('studipform_omit_participated')) {
-                        $not_participated = array();
-                        foreach ($members as $member) {
-                            $rpc = new UniZensusRPC();
-                            $status = $rpc->getCourseStatus($zensusid, $member);
-                            if ($status['status'] == 'run' && $status['questionnaire'] && $status['noquestionnairereason'] != 'user_id voted already') {
-                                $not_participated[] = $member;
+                        $rpc = new UniZensusRPC();
+                        $status = $rpc->getCourseStatus($zensusid);
+                        if ($status['status'] == 'run') {
+                            $not_participated = array();
+                            foreach ($members as $member) {
+                                $status = $rpc->getCourseStatus($zensusid, $member);
+                                if ($status['status'] == 'run' && $status['questionnaire'] && $status['noquestionnairereason'] != 'user_id voted already') {
+                                    $not_participated[] = $member;
+                                }
                             }
+                            $members = $not_participated;
+                        } else {
+                            $members = array();
+                            PageLayout::postError(sprintf(_('Die Evaluation befindet sich nicht in der richtigen Phase (Aktuelle Phase: %s)!'), $status['status']));
                         }
-                        $members = $not_participated;
                     }
                     if ($members) {
                         // If Garuda plugin with almighty message sending powers is present, use it.
@@ -830,7 +836,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                             $message->author_id = $GLOBALS['user']->id;
                             $message->send_date = time();
                             $message->target = 'usernames';
-                            $message->recipients = studip_json_encode($members);
+                            $message->recipients = $members;
                             $message->subject = $text['subject'];
                             $message->message = $text['text'];
 
