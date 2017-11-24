@@ -793,7 +793,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             if (Request::getArray('sem_choosen')) {
                 $sent = array();
                 $recipients = 0;
-                $failed = array();
+                $errors = array('status' => [], 'sending' => []);
                 $m = new Message();
                 $t = Request::option('studipform_text_template');
                 // Proceed through selected courses.
@@ -824,7 +824,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                             $members = $not_participated;
                         } else {
                             $members = array();
-                            PageLayout::postError(sprintf(_('Die Evaluation befindet sich nicht in der richtigen Phase (Aktuelle Phase: %s)!'), $status['status']));
+                            $errors['status'][] = $s;
                         }
                     }
                     if ($members) {
@@ -856,7 +856,9 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                             }
                         }
                     } else {
-                        $failed[] = $s;
+                        if (!in_array($s, $errors['status'])) {
+                            $errors['sending'][] = $s;
+                        }
                     }
                 }
                 // Show summary for all successfully processed courses.
@@ -868,9 +870,15 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     }
                 }
                 // Show summary for all failures. Here we need details - which courses have failed?
-                if ($failed) {
-                    echo MessageBox::error(_('Fehler beim Nachrichtenversand in folgenden Veranstaltungen:'),
-                        array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
+                if (count($errors) > 0) {
+                    if (count($errors['status']) > 0) {
+                        PageLayout::postError(_('Die Evaluation zu folgenden Veranstaltungen ist nicht in der richtigen Phase:'),
+                            array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $errors['status']));
+                    }
+                    if (count($errors['sending']) > 0) {
+                        PageLayout::postError(_('Fehler beim Nachrichtenversand in folgenden Veranstaltungen:'),
+                            array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $errors['sending']));
+                    }
                 }
             // No courses selected, so whom to send to?
             } else {
