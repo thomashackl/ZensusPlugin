@@ -863,7 +863,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 }
                 // Show summary for all failures. Here we need details - which courses have failed?
                 if ($failed) {
-                    echo MessageBox::success(_('Fehler beim Nachrichtenversand in folgenden Veranstaltungen:'),
+                    echo MessageBox::error(_('Fehler beim Nachrichtenversand in folgenden Veranstaltungen:'),
                         array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
                 }
             // No courses selected, so whom to send to?
@@ -918,7 +918,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 }
                 // Show summary for all failures. Here we need details - which courses have failed?
                 if ($failed) {
-                    echo MessageBox::success(_('Die Ankündigung konnte in folgenden Veranstaltungen nicht erstellt werden:'),
+                    echo MessageBox::error(_('Die Ankündigung konnte in folgenden Veranstaltungen nicht erstellt werden:'),
                         array_map(function($s) { $c = Course::find($s); $text = $c->name; if ($c->veranstaltungsnummer) $text = $c->veranstaltungsnummer.' '.$c->name; return $text; }, $failed));
                 }
             // No courses selected, so whom to send to?
