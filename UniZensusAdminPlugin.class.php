@@ -809,7 +809,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     $zensusid = $semester_id.'_'.$s;
                     $text = UnizensusTextTemplate::createText($s, $t);
                     // Get all members of the current course.
-                    $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` IN ('user', 'autor')", array($s)));
+                    $members = array_map(function($e) { return $e->user_id; }, CourseMember::findBySQL("`Seminar_id`=? AND `status` = 'autor'", array($s)));
                     if (Request::option('studipform_omit_participated')) {
                         $rpc = new UniZensusRPC();
                         $status = $rpc->getCourseStatus($zensusid);
