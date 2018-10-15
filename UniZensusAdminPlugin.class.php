@@ -188,8 +188,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 $set_to_status = $form->getFormFieldValue('plugin_status') ? 'on' : 'off';
                 $db = new DB_Seminar();
                 foreach(array_keys($_REQUEST['sem_choosen']) as $seminar_id){
-                    $db->queryf("REPLACE INTO plugins_activated (pluginid,poiid,state) VALUES ('%s','%s','%s')",
-                        $this->zensuspluginid, 'sem' . $seminar_id, $set_to_status);
+                    $db->queryf("REPLACE INTO plugins_activated (pluginid,range_type,range_id,state) VALUES ('%s','sem','%s','%s')",
+                        $this->zensuspluginid, $seminar_id, $set_to_status);
                 }
                 $form->doFormReset();
             }
@@ -680,7 +680,8 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             $query2 = "SELECT state, 'sem' AS activated_by
             FROM plugins_activated pat
             WHERE pat.pluginid = '$pluginid'
-            AND pat.poiid = 'sem$seminar_id'
+            AND pat.range_id = '$seminar_id'
+            AND pat.range_type = 'sem'
             UNION SELECT 'on', 'default'
             FROM seminar_inst s
             JOIN Institute i ON i.Institut_id = s.institut_id
