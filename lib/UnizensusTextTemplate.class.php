@@ -77,30 +77,12 @@ class UnizensusTextTemplate extends SimpleORMap
     }
 
     public static function calculateTimeFrame($courseId) {
-        $globalStart = get_config('UNIZENSUSPLUGIN_BEGIN_EVALUATION');
-        $globalEnd = get_config('UNIZENSUSPLUGIN_END_EVALUATION');
-        $stmt = DBManager::get()->prepare("SELECT `content` FROM `datafields_entries` WHERE `range_id`=? AND `datafield_id`=?");
-        $stmt->execute(array($courseId, md5('UNIZENSUSPLUGIN_BEGIN_EVALUATION')));
-        $localStart = $stmt->fetch();
-        if ($localStart) {
-            $localStart = strtotime($localStart['content']);
-        } else if ($globalStart) {
-            $localStart = strtotime($globalStart);
-        } else {
-            $localStart = DBManager::get()->fetchFirst("SELECT MIN(`date`) AS start_time FROM `termine` WHERE `range_id`=?", array($courseId));
-            $localStart = $localStart[0];
-        }
-        $stmt->execute(array($courseId, md5('UNIZENSUSPLUGIN_END_EVALUATION')));
-        $localEnd = $stmt->fetch();
-        if ($localEnd) {
-            $localEnd = strtotime($localEnd['content']);
-        } else if ($globalEnd) {
-            $localEnd = strtotime($globalEnd);
-        } else {
-            $localEnd = DBManager::get()->fetchFirst("SELECT MAX(`end_time`) AS end_time FROM `termine` WHERE `range_id`=?", array($courseId));
-            $localEnd = $localEnd[0];
-        }
-        return array('start' => $localStart, 'end' => $localEnd);
+        $info = PluginManager::getInstance()->getPluginInfo('unizensusplugin');
+        $plugin = PluginManager::getInstance()->getPluginById($info['id']);
+        $plugin->setId($courseId);
+        $timeFrame = $plugin->getCourseEvaluationTimeframe();
+
+        return array('start' => $timeFrame[0], 'end' => $timeFrame[1]);
     }
 
 }
