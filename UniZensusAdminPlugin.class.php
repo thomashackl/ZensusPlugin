@@ -750,7 +750,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         $authcode = Request::option('authcode');
         if ($authcode) {
-            $auth_uid = DbManager::get()->query("SELECT user_id FROM user_config WHERE field='UNIZENSUSPLUGIN_AUTH_TOKEN' AND value='$authcode'")->fetchColumn();
+            $auth_uid = DBManager::get()->fetchOne("SELECT `range_id` FROM `config_values` WHERE `field` = 'UNIZENSUSPLUGIN_AUTH_TOKEN' AND `value` = ?", [$authcode]);
             if (!$auth_uid) $export_error = 'wrong authcode';
         } else {
             $export_error = 'missing authcode';
