@@ -581,10 +581,10 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                             echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('questionnaire',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
                             echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Den Fragebogen aufrufen und an der Evaluation teilnehmen") . '</a></p>';
                         } else {
-                            echo chr(10) .'<p>'. _("F�r diese Evaluation ist ein Papierfragebogen vorgesehen. Weitere Informationen bekommen Sie von den Lehrenden der Veranstaltung.") . '</p>';
+                            echo chr(10) .'<p>'. _("Für diese Evaluation ist ein Papierfragebogen vorgesehen. Weitere Informationen bekommen Sie von den Lehrenden der Veranstaltung.") . '</p>';
                         }
                     } else {
-                        echo chr(10) . '<p>'._("Als Dozent der Veranstaltung k�nnen sie nicht an der Evaluation teilnehmen!") . '</p>';
+                        echo chr(10) . '<p>'._("Als Dozent der Veranstaltung können sie nicht an der Evaluation teilnehmen!") . '</p>';
                     }
                 } elseif ($this->course_status['status'] == 'run' && !$GLOBALS['perm']->have_studip_perm('dozent' , $this->getId())){
                     echo chr(10) .'<p>'. _("Sie haben an dieser Evaluation bereits teilgenommen!") . '</p>';
