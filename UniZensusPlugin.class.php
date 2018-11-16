@@ -398,7 +398,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
         PageLayout::addScript($this->getPluginURL()."/assets/qrcourse.js");
         $this->addStylesheet("assets/qrcourse.less");
         URLHelper::setBaseURL($GLOBALS['ABSOLUTE_URI_STUDIP']);
-        $url = URLHelper::getLink($_SERVER['REQUEST_URI']);
+        $url = URLHelper::getLink($_SERVER['REQUEST_URI'], ['again' => 'yes']);
         PageLayout::addBodyElements('
                 <div style="background-color: white; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center;"
                      id="qr_code">
@@ -489,11 +489,11 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                 echo chr(10) . '<div style="font-weight:bold;font-size:10pt;border: 1px solid;padding:5px">' . _("Mögliche Aktionen:") . '<div style="font-size:10pt;margin-left:10px">';
                 if ($this->course_status['preview']) {
                     echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('preview',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                    echo chr(10) . '<img src="'.$pluginrelativepath.'/images/link_extern.gif" hspace="2" border="0">' . _("Eine Voransicht des Fragebogens aufrufen") . '</a></p>';
+                    echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Eine Voransicht des Fragebogens aufrufen") . '</a></p>';
                 }
                 if ($this->course_status['pdfquestionnaire'] && $GLOBALS['perm']->have_studip_perm('dozent', $this->getId()) ) {
                     echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfquestionnaire',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                    echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Papierfragebogen für manuelle Erhebung als PDF aufrufen") . '</a></p>';
+                    echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Papierfragebogen für manuelle Erhebung als PDF aufrufen") . '</a></p>';
                 }
 
                 if ($results_available
@@ -502,19 +502,19 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                     && $GLOBALS['auth']->auth['perm'] != 'root') {
                     if ($this->course_status['results']) {
                         echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('results',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                        echo chr(10) . '<img src="'.$pluginrelativepath.'/images/link_extern.gif" hspace="2" border="0">' . _("Die Ergebnisse der Evaluation aufrufen") . '</a></p>';
+                        echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Die Ergebnisse der Evaluation aufrufen") . '</a></p>';
                     }
                     /*if ($this->checkResultforUser('pdfdetail', $user_id)) {
                         echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfdetail',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                        echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung) der Evaluation als PDF aufrufen") . '</a></p>';
+                        echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung) der Evaluation als PDF aufrufen") . '</a></p>';
                     }*/
                     if ($this->checkResultforUser('pdfdetailfreetexts', $user_id)) {
                         echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfdetailfreetexts',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                        echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung mit Kommentaren) der Evaluation als PDF aufrufen") . '</a></p>';
+                        echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung mit Kommentaren) der Evaluation als PDF aufrufen") . '</a></p>';
                     }
                     if ($this->checkResultforUser('pdfresults', $user_id)) {
                             echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfresults',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                            echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Profillinie) der Evaluation als PDF aufrufen") . '</a></p>';
+                            echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Profillinie) der Evaluation als PDF aufrufen") . '</a></p>';
                     }
                 }
                 if ($results_available
@@ -524,12 +524,12 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                     ) {
                     if ($this->course_status['results']) {
                         echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('results',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                        echo chr(10) . '<img src="'.$pluginrelativepath.'/images/link_extern.gif" hspace="2" border="0">' . _("Die Ergebnisse der Evaluation aufrufen") . '</a></p>';
+                        echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Die Ergebnisse der Evaluation aufrufen") . '</a></p>';
                     }
                     //hier könnte evtl. pdfdetail benutzt werden, im Moment nur für OL relevant
                     if ($this->checkResultforUser('pdfresults', $user_id)) {
                         echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfresults',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                        echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Profillinie) der Evaluation als PDF aufrufen") . '</a></p>';
+                        echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Profillinie) der Evaluation als PDF aufrufen") . '</a></p>';
                     }
                 }
 
@@ -557,19 +557,19 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                             echo '<h3>' . htmlready($m['Nachname'].', '.$m['Vorname']) . '</h4>';
                             if ($this->course_status['results']) {
                                 echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('results',$this->getZensusCourseId(),$m['user_id']) . '">';
-                                echo chr(10) . '<img src="'.$pluginrelativepath.'/images/link_extern.gif" hspace="2" border="0">' . _("Die Ergebnisse der Evaluation aufrufen") . '</a></p>';
+                                echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Die Ergebnisse der Evaluation aufrufen") . '</a></p>';
                             }
                             if ($this->checkResultforUser('pdfdetail', $m['user_id'])) {
                                 echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfdetail',$this->getZensusCourseId(),$m['user_id']) . '">';
-                                echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung) der Evaluation als PDF aufrufen") . '</a></p>';
+                                echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung) der Evaluation als PDF aufrufen") . '</a></p>';
                             }
                             if ($this->checkResultforUser('pdfdetailfreetexts', $m['user_id'])) {
                                 echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfdetailfreetexts',$this->getZensusCourseId(),$m['user_id']) . '">';
-                                echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung mit Kommentaren) der Evaluation als PDF aufrufen") . '</a></p>';
+                                echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Detailauswertung mit Kommentaren) der Evaluation als PDF aufrufen") . '</a></p>';
                             }
                             if ($this->checkResultforUser('pdfresults', $m['user_id'])) {
                                 echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('pdfresults',$this->getZensusCourseId(),$m['user_id']) . '">';
-                                echo chr(10) . '<img src="'.$pluginrelativepath.'/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Profillinie) der Evaluation als PDF aufrufen") . '</a></p>';
+                                echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/pdf-icon.gif" hspace="2" border="0" align="absbottom">' . _("Die Ergebnisse (Profillinie) der Evaluation als PDF aufrufen") . '</a></p>';
                             }
                         }
                     }
@@ -579,7 +579,7 @@ class UniZensusPlugin extends StudipPlugin implements StandardPlugin
                     if (!$GLOBALS['perm']->have_studip_perm('dozent' , $this->getId())) {
                         if (!$this->course_status['pdfquestionnaire']) {
                             echo chr(10) . '<p><a target="_blank" href="' . $this->RPC->getEvaluationURL('questionnaire',$this->getZensusCourseId(),$GLOBALS['user']->id) . '">';
-                            echo chr(10) . '<img src="'.$pluginrelativepath.'/images/link_extern.gif" hspace="2" border="0">' . _("Den Fragebogen aufrufen und an der Evaluation teilnehmen") . '</a></p>';
+                            echo chr(10) . '<img src="'.$pluginrelativepath.'/assets/images/link_extern.gif" hspace="2" border="0">' . _("Den Fragebogen aufrufen und an der Evaluation teilnehmen") . '</a></p>';
                         } else {
                             echo chr(10) .'<p>'. _("F�r diese Evaluation ist ein Papierfragebogen vorgesehen. Weitere Informationen bekommen Sie von den Lehrenden der Veranstaltung.") . '</p>';
                         }

@@ -35,10 +35,10 @@ class UnizensusTextTemplate extends SimpleORMap
         $pm = PluginManager::getInstance();
         $unizensus = $pm->getPlugin('UniZensusPlugin');
         $unizensusid = $unizensus->getPluginId();
-        $link = $GLOBALS['ABSOLUTE_URI_STUDIP'].'seminar_main.php?auswahl='.$course->id;
+        $link = $GLOBALS['ABSOLUTE_URI_STUDIP'].'seminar_main.php?auswahl='.$course->id.'&again=yes';
         if ($unizensusid) {
             if ($unizensus->isActivated($course->id, 'sem')) {
-                $link = $GLOBALS['ABSOLUTE_URI_STUDIP'].'plugins.php/unizensusplugin/show?cid='.$course->id;
+                $link = $GLOBALS['ABSOLUTE_URI_STUDIP'].'plugins.php/unizensusplugin/show?cid='.$course->id.'&again=yes';
             }
         }
         $markers = array(
