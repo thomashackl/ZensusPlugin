@@ -206,7 +206,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
         if (Request::submitted('choose_institut') || Request::submitted('export')) {
             $_SESSION['_default_sem'] = Request::option('select_sem', $_SESSION['_default_sem']);
             $_SESSION['zensus_admin']['check_eval'] = isset($_REQUEST['check_eval']);
-            $_SESSION['zensus_admin']['plugin_activated'] = isset($_REQUEST['plugin_activated']);
+            $_SESSION['zensus_admin']['plugin_activated'] = $_REQUEST['plugin_activated'];
             $_SESSION['zensus_admin']['filter_name'] = trim(Request::get('filter_name'));
         }
 
@@ -295,8 +295,18 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             &nbsp;<label for="check_eval"><?=_("Evaluation in Zensus aktiviert")?></label>
             </span>
             <span style="margin-left:10px;font-size:10pt;">
-            <input type="checkbox" id="plugin_activated" name="plugin_activated" <?=$_SESSION['zensus_admin']['plugin_activated'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">
-            &nbsp;<label for="plugin_activated"><?=_("Plugin eingeschaltet")?></label>
+            &nbsp;<label for="plugin_activated"><?=_("Pluginstatus")?></label>
+                <select name="plugin_activated">
+                    <option value=""<?= $_SESSION['zensus_admin']['plugin_activated'] == '' ? ' selected' : '' ?>>
+                        <?= _('nicht berücksichtigen') ?>
+                    </option>
+                    <option value="1"<?= $_SESSION['zensus_admin']['plugin_activated'] == 1 ? ' selected' : '' ?>>
+                        <?= _('Plugin eingeschaltet') ?>
+                    </option>
+                    <option value="-1"<?= $_SESSION['zensus_admin']['plugin_activated'] == -1 ? ' selected' : '' ?>>
+                        <?= _('Plugin ausgeschaltet') ?>
+                    </option>
+                </select>
             </span>
             </div>
             <div style="font-size:10pt;margin:10px;">
@@ -371,24 +381,29 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             }
             foreach($data as $seminar_id => $semdata) {
                 if($semdata['activated_by_sem'] == 'on' || ($semdata['activated_by_sem'] != 'off' && $semdata['activated_by_default'] == 'on')){
-                    $plugin = PluginManager::getInstance()->getPluginById($this->zensuspluginid);
-                    $plugin->setId($seminar_id);
-                    $plugin->getCourseStatus();
-                    $plugin->semester_id = $_SESSION['_default_sem'] ? $_SESSION['_default_sem'] : null;
-                    if($_SESSION['zensus_admin']['check_eval'] && !in_array($plugin->course_status['status'], array('prepare','run','analyze','finished'))){
+                    if ($_SESSION['zensus_admin']['plugin_activated'] == -1) {
                         unset($data[$seminar_id]);
                         continue;
+                    } else {
+                        $plugin = PluginManager::getInstance()->getPluginById($this->zensuspluginid);
+                        $plugin->setId($seminar_id);
+                        $plugin->getCourseStatus();
+                        $plugin->semester_id = $_SESSION['_default_sem'] ? $_SESSION['_default_sem'] : null;
+                        if ($_SESSION['zensus_admin']['check_eval'] && !in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished'))) {
+                            unset($data[$seminar_id]);
+                            continue;
+                        }
+                        $data[$seminar_id]['link'] = "<a href=\"" . PluginEngine::GetLink($plugin, array('cid' => $seminar_id)) . "\">"
+                            . htmlReady($plugin->course_status['status']) . "</a>";
+                        $data[$seminar_id]['zensus_status'] = $plugin->course_status['status'];
+                        $data[$seminar_id]['zensus_numvotes'] = $plugin->course_status['numvotes'];
+                        $data[$seminar_id]['time_frame_begin'] = $plugin->course_status['time_frame']['begin'];
+                        $data[$seminar_id]['time_frame_end'] = $plugin->course_status['time_frame']['end'];
+                        $data[$seminar_id]['plugin_activated'] = true;
                     }
-                    $data[$seminar_id]['link'] = "<a href=\"".PluginEngine::GetLink($plugin,array('cid' => $seminar_id)) . "\">"
-                    . htmlReady($plugin->course_status['status'])."</a>";
-                    $data[$seminar_id]['zensus_status'] = $plugin->course_status['status'];
-                    $data[$seminar_id]['zensus_numvotes'] = $plugin->course_status['numvotes'];
-                    $data[$seminar_id]['time_frame_begin'] = $plugin->course_status['time_frame']['begin'];
-                    $data[$seminar_id]['time_frame_end'] = $plugin->course_status['time_frame']['end'];
-                    $data[$seminar_id]['plugin_activated'] = true;
                 } else {
                     $plugin = null;
-                    if($_SESSION['zensus_admin']['check_eval'] || $_SESSION['zensus_admin']['plugin_activated']){
+                    if($_SESSION['zensus_admin']['check_eval'] || $_SESSION['zensus_admin']['plugin_activated'] == 1){
                         unset($data[$seminar_id]);
                         continue;
                     }
