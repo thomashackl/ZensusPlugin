@@ -205,7 +205,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
 
         if (Request::submitted('choose_institut') || Request::submitted('export')) {
             $_SESSION['_default_sem'] = Request::option('select_sem', $_SESSION['_default_sem']);
-            $_SESSION['zensus_admin']['check_eval'] = isset($_REQUEST['check_eval']);
+            $_SESSION['zensus_admin']['check_eval'] = $_REQUEST['check_eval'];
             $_SESSION['zensus_admin']['plugin_activated'] = $_REQUEST['plugin_activated'];
             $_SESSION['zensus_admin']['filter_name'] = trim(Request::get('filter_name'));
         }
@@ -286,14 +286,24 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
             </div>
             <div style="font-size:10pt;margin:10px;">
             <b><?=_("Angezeigte Veranstaltungen einschränken:")?></b>
-            <span style="margin-left:10px;font-size:10pt;">
+            <div style="margin-left:10px;font-size:10pt;">
             <input type="text" id="filter_name" name="filter_name" value="<?=htmlReady($_SESSION['zensus_admin']['filter_name'])?>" style="vertical-align:middle;">
             &nbsp;<label for="filter_name"><?=_("Name/Nummer der Veranstaltung")?></label>
-            </span>
-            <span style="margin-left:10px;font-size:10pt;">
-            <input type="checkbox" id="check_eval" name="check_eval" <?=$_SESSION['zensus_admin']['check_eval'] ? 'checked' : ''?> value="1" style="vertical-align:middle;">
-            &nbsp;<label for="check_eval"><?=_("Evaluation in Zensus aktiviert")?></label>
-            </span>
+            </div>
+            <div style="margin-left:10px;font-size:10pt;">
+            &nbsp;<label for="check_eval"><?=_("Evaluation in Zensus")?></label>
+                <select name="check_eval">
+                    <option value=""<?= $_SESSION['zensus_admin']['plugin_activated'] == '' ? ' selected' : '' ?>>
+                        <?= _('nicht berücksichtigen') ?>
+                    </option>
+                    <option value="found"<?= $_SESSION['zensus_admin']['check_eval'] == 'found' ? ' selected' : '' ?>>
+                        <?= _('aktiviert') ?>
+                    </option>
+                    <option value="missing"<?= $_SESSION['zensus_admin']['check_eval'] == 'missing' ? ' selected' : '' ?>>
+                        <?= _('nicht vorhanden') ?>
+                    </option>
+                </select>
+            </div>
             <span style="margin-left:10px;font-size:10pt;">
             &nbsp;<label for="plugin_activated"><?=_("Pluginstatus")?></label>
                 <select name="plugin_activated">
@@ -380,16 +390,19 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                 echo "</tr>";
             }
             foreach($data as $seminar_id => $semdata) {
-                if($semdata['activated_by_sem'] == 'on' || ($semdata['activated_by_sem'] != 'off' && $semdata['activated_by_default'] == 'on')){
+                if ($semdata['activated_by_sem'] == 'on' || ($semdata['activated_by_sem'] != 'off' && $semdata['activated_by_default'] == 'on')) {
                     if ($_SESSION['zensus_admin']['plugin_activated'] == -1) {
                         unset($data[$seminar_id]);
                         continue;
                     } else {
-                        $plugin = PluginManager::getInstance()->getPluginById($this->zensuspluginid);
-                        $plugin->setId($seminar_id);
-                        $plugin->getCourseStatus();
+                        if ($_SESSION['zensus_admin']['check_eval'] != '') {
+                            $plugin = PluginManager::getInstance()->getPluginById($this->zensuspluginid);
+                            $plugin->setId($seminar_id);
+                            $plugin->getCourseStatus();
+                        }
                         $plugin->semester_id = $_SESSION['_default_sem'] ? $_SESSION['_default_sem'] : null;
-                        if ($_SESSION['zensus_admin']['check_eval'] && !in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished'))) {
+                        if ($_SESSION['zensus_admin']['check_eval'] == 'found' && !in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished')) ||
+                                $_SESSION['zensus_admin']['check_eval'] == 'missing' && in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished'))) {
                             unset($data[$seminar_id]);
                             continue;
                         }
@@ -403,7 +416,21 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     }
                 } else {
                     $plugin = null;
-                    if($_SESSION['zensus_admin']['check_eval'] || $_SESSION['zensus_admin']['plugin_activated'] == 1){
+
+                    if ($_SESSION['zensus_admin']['check_eval'] !== '') {
+                        $rpc = new UniZensusRPC();
+                        $status = $rpc->getCourseStatus($seminar_id);
+
+                        if ($_SESSION['zensus_admin']['check_eval'] == 'found' && !in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished')) ||
+                                $_SESSION['zensus_admin']['check_eval'] == 'missing' && in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished'))) {
+                            unset($data[$seminar_id]);
+                            continue;
+                        } else {
+                            $data[$seminar_id]['link'] = $status['status'];
+                        }
+                    }
+
+                    if ($_SESSION['zensus_admin']['check_eval'] == 'found' || $_SESSION['zensus_admin']['plugin_activated'] == 1) {
                         unset($data[$seminar_id]);
                         continue;
                     }
