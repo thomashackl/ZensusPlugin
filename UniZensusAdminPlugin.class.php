@@ -395,11 +395,10 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                         unset($data[$seminar_id]);
                         continue;
                     } else {
-                        if ($_SESSION['zensus_admin']['check_eval'] != '') {
-                            $plugin = PluginManager::getInstance()->getPluginById($this->zensuspluginid);
-                            $plugin->setId($seminar_id);
-                            $plugin->getCourseStatus();
-                        }
+                        $plugin = PluginManager::getInstance()->getPluginById($this->zensuspluginid);
+                        $plugin->setId($seminar_id);
+                        $plugin->getCourseStatus();
+
                         $plugin->semester_id = $_SESSION['_default_sem'] ? $_SESSION['_default_sem'] : null;
                         if ($_SESSION['zensus_admin']['check_eval'] == 'found' && !in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished')) ||
                                 $_SESSION['zensus_admin']['check_eval'] == 'missing' && in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished'))) {
