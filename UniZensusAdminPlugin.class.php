@@ -418,11 +418,20 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                     $plugin = null;
 
                     if ($_SESSION['zensus_admin']['check_eval'] !== '') {
-                        $rpc = new UniZensusRPC();
-                        $status = $rpc->getCourseStatus($seminar_id);
+                        $seminar = Seminar::GetInstance($seminar_id);
+                        $semester = SemesterData::GetInstance();
+                        if($seminar->getSemesterDurationTime() == 0){
+                            $current_sem = $semester->getSemesterDataByDate($seminar->getSemesterStartTime());
+                        } else {
+                            $current_sem = $semester->getCurrentSemesterData();
+                        }
+                        $this->semester_id = $current_sem['semester_id'];
 
-                        if ($_SESSION['zensus_admin']['check_eval'] == 'found' && !in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished')) ||
-                                $_SESSION['zensus_admin']['check_eval'] == 'missing' && in_array($plugin->course_status['status'], array('prepare', 'run', 'analyze', 'finished'))) {
+                        $rpc = new UniZensusRPC();
+                        $status = $rpc->getCourseStatus($current_sem['semester_id'] . '_' . $seminar_id);
+
+                        if ($_SESSION['zensus_admin']['check_eval'] == 'found' && !in_array($status['status'], array('prepare', 'run', 'analyze', 'finished')) ||
+                                $_SESSION['zensus_admin']['check_eval'] == 'missing' && in_array($status['status'], array('prepare', 'run', 'analyze', 'finished'))) {
                             unset($data[$seminar_id]);
                             continue;
                         } else {
@@ -430,7 +439,7 @@ class UniZensusAdminPlugin extends StudipPlugin implements SystemPlugin {
                         }
                     }
 
-                    if ($_SESSION['zensus_admin']['check_eval'] == 'found' || $_SESSION['zensus_admin']['plugin_activated'] == 1) {
+                    if ($_SESSION['zensus_admin']['plugin_activated'] == 1) {
                         unset($data[$seminar_id]);
                         continue;
                     }
